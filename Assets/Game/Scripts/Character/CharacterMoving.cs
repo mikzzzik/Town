@@ -59,7 +59,7 @@ public class CharacterMoving : MonoBehaviour
     private void FixedUpdate()
     {
         //   Debug.Log("Has path: " +_navMeshAgent.hasPath + "\nPath pending: " + _navMeshAgent.pathPending + "\nPath end position: " + _navMeshAgent.pathEndPosition);
-        Debug.Log(_navMeshAgent.angularSpeed);
+       // Debug.Log(_navMeshAgent.angularSpeed);
         if (!_navMeshAgent.hasPath && !_navMeshAgent.pathPending) animator.SetBool("Move", false) ;
     }
 

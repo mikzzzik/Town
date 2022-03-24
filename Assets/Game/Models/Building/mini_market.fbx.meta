@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: dd70936dad473264098ea43cd2000ad4
+guid: bbd296db1784c424f839a27df8daf77e
 ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable: []
@@ -7,8 +7,18 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Wall
-    second: {fileID: 2100000, guid: 71dcf3018a4e6df42b736a1e8f47d1af, type: 2}
+      name: Material.001
+    second: {fileID: 2100000, guid: f524e70d16c021d478658735d0a4bcb0, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.002
+    second: {fileID: 2100000, guid: 3115cfb70c8a3014ca2152ec584c7979, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: "\u041F\u0430\u043A \u043D\u043E\u043C\u0435\u0440 1"
+    second: {fileID: 2100000, guid: 9ba157335dc9c434c9312aa089ba63cd, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

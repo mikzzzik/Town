@@ -5,8 +5,7 @@ using UnityEngine.EventSystems;
 public class MouseInput : MonoBehaviour
 {
     [SerializeField] private Camera _mainCamera;
-    [SerializeField] private LayerMask _ignoreLayer;
-
+    [SerializeField] private LayerMask _layerMask;
     void Start()
     {
         
@@ -15,21 +14,27 @@ public class MouseInput : MonoBehaviour
     
     void Update()
     {
-        if (EventSystem.current.IsPointerOverGameObject()) return;
+      
 
         if (Input.GetMouseButtonDown(0))
         {
+            if (EventSystem.current.IsPointerOverGameObject()) return;
+
             Ray ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
 
             RaycastHit hitPoint;
+            RaycastHit tempHitPoint;
 
             int layerMask = 1 << 8;
             layerMask = ~layerMask;
 
-            // Debug.Log(Physics.Raycast(ray, out hitPoint,15f, layerMask));
-            if(Physics.Raycast(ray, out hitPoint, 15f, layerMask))
+            Physics.Raycast(ray, out tempHitPoint, 30f, _layerMask);
+            Debug.Log("GG: " + tempHitPoint.collider);
+
+
+            if (Physics.Raycast(ray, out hitPoint, 30f, _layerMask))
             {
-    
+                Debug.Log(hitPoint.collider );
                 if (hitPoint.collider.gameObject.layer == 6) return;
 
                 CharacterMoving.OnSetNewPosition(hitPoint.point);
