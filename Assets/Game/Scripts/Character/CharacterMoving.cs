@@ -6,7 +6,11 @@ public class CharacterMoving : MonoBehaviour
 {
     [SerializeField] private Animator animator;
     [SerializeField] private NavMeshAgent _navMeshAgent;
+    
     [SerializeField] private Character _character;
+    [SerializeField] private CharacterController _characterController;
+    
+    [SerializeField] private float _playerSpeed = 2.0f;
 
     private Vector3 _nextPos;
     private RaycastHit _hit;
@@ -58,8 +62,15 @@ public class CharacterMoving : MonoBehaviour
 
     private void FixedUpdate()
     {
-        //   Debug.Log("Has path: " +_navMeshAgent.hasPath + "\nPath pending: " + _navMeshAgent.pathPending + "\nPath end position: " + _navMeshAgent.pathEndPosition);
-       // Debug.Log(_navMeshAgent.angularSpeed);
+        Vector3 move = new Vector3(-Input.GetAxis("Horizontal"), 0, -Input.GetAxis("Vertical"));
+        
+        _characterController.Move(move * Time.deltaTime * _playerSpeed);
+        if(move != Vector3.zero)
+        {
+            animator.SetBool("Move", true);
+
+        }
+        else
         if (!_navMeshAgent.hasPath && !_navMeshAgent.pathPending) animator.SetBool("Move", false) ;
     }
 
