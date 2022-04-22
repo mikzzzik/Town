@@ -54,9 +54,9 @@ public class CharacterMoving : MonoBehaviour
     {
 
 
-        animator.SetBool("Move", true);
+       /* animator.SetBool("Move", true);
 
-        _navMeshAgent.SetDestination(_nextPos);
+        _navMeshAgent.SetDestination(_nextPos);*/
        
     }
 
@@ -68,7 +68,7 @@ public class CharacterMoving : MonoBehaviour
         if(move != Vector3.zero)
         {
             animator.SetBool("Move", true);
-
+            transform.rotation = Quaternion.LookRotation(move);
         }
         else
         if (!_navMeshAgent.hasPath && !_navMeshAgent.pathPending) animator.SetBool("Move", false) ;
@@ -76,16 +76,16 @@ public class CharacterMoving : MonoBehaviour
 
     private void ContinueMove()
     {
-        animator.SetBool("Move", true);
+       /* animator.SetBool("Move", true);
 
         _navMeshAgent.isStopped = false;
 
-        _navMeshAgent.SetDestination(_nextPos);
+        _navMeshAgent.SetDestination(_nextPos);*/
     }
     private void StopMoving()
     {
-        animator.SetBool("Move", false);
-        _navMeshAgent.isStopped = true;
+/*        animator.SetBool("Move", false);
+        _navMeshAgent.isStopped = true;*/
     }
     
 }

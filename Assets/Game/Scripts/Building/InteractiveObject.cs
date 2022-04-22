@@ -4,11 +4,17 @@ using UnityEngine;
 
 public class InteractiveObject : MonoBehaviour
 {
-    protected bool _status = false;
+    [SerializeField] protected bool _status = false;
 
-    public void Interactive()
+    protected bool _actionStatus;
+
+    public   void Interactive()
     {
-        if(_status)
+        if (_actionStatus) return;
+
+        Debug.Log(_status);
+
+        if(!_status)
         {
             Active();
         }
@@ -18,13 +24,13 @@ public class InteractiveObject : MonoBehaviour
         }
     }
 
-     public virtual void Active()
+     protected virtual void Active()
      {
 
      }
-    public virtual void Disable()
+    protected virtual void Disable()
     {
-
+      
     }
 
 }

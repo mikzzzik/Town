@@ -18,10 +18,10 @@ public class CameraFollow : MonoBehaviour
 
     private void Update()
     {
-
-
+  
         float smoothPositionHorizontal = Mathf.Lerp(transform.position.x, _target.position.x, _smoothSpeed);
         float smoothPositionVertical = Mathf.Lerp(transform.position.z, _target.position.z + _offSet, _smoothSpeed);
+        
 
         transform.position = new Vector3(smoothPositionHorizontal, transform.position.y, smoothPositionVertical);
     }

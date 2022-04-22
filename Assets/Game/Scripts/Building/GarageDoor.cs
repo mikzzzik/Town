@@ -5,23 +5,30 @@ using DG.Tweening;
 
 public class GarageDoor : InteractiveObject
 {
-    [SerializeField] private Transform _garageDoor;
-    [SerializeField] private Transform _endPosition;
-    [SerializeField] private Transform _beginPosition;
+    [SerializeField] private Animator _animator;
+ 
 
-    public override void Active()
+
+    protected override void Active()
     {
-        _garageDoor.DOMove(_endPosition.position, 2f).SetEase(Ease.Linear).OnComplete(() => 
-        {
-            _status = true; 
-        });        
+        _actionStatus = true;
+        _animator.SetBool("Status", true);
+ 
+        _status = true;
+      
     }
 
-    public override void Disable()
+    protected override void Disable()
     {
-        _garageDoor.DOMove(_beginPosition.position, 2f).SetEase(Ease.Linear).OnComplete(() =>
-        {
-            _status = true;
-        });
+        _actionStatus = true;
+        _animator.SetBool("Status", false) ;
+
+        _status = false; 
+
+    }
+
+    public void CanAction()
+    {
+        _actionStatus = false;
     }
 }

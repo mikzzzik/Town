@@ -16,7 +16,7 @@ public class MouseInput : MonoBehaviour
     {
       
 
-        if (Input.GetMouseButtonDown(0))
+        /*if (Input.GetMouseButtonDown(0))
         {
             if (EventSystem.current.IsPointerOverGameObject()) return;
 
@@ -42,6 +42,6 @@ public class MouseInput : MonoBehaviour
 
                 ContextMenu.OnShowContextMenu(new List<ContextAction>() { ContextAction.Move, ContextAction.Cancel });
             }
-        }
+        }*/
     }
 }
