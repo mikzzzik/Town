@@ -1,6 +1,6 @@
 using UnityEngine;
-using UnityEngine.UI;
-[CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/Items/item", order = 1)]
+
+[CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/Item", order = 1)]
 
 public class Item : ScriptableObject
 {

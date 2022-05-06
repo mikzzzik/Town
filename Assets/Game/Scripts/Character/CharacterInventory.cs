@@ -9,15 +9,18 @@ public class CharacterInventory : MonoBehaviour
     private BoxCarrying _nowBox;
 
     public static Action<BoxType> OnChooseBox;
+    public static Action<Container> OnOpenContainer;
 
     private void OnEnable()
     {
         OnChooseBox += ChooseBox;
+        OnOpenContainer += OpenContainer;
     }
 
     private void OnDisable()
     {
         OnChooseBox -= ChooseBox;
+        OnOpenContainer -= OpenContainer;
     }
 
     public BoxCarrying GetBox()
@@ -29,6 +32,7 @@ public class CharacterInventory : MonoBehaviour
     {
         if (boxType == BoxType.none)
         {
+            _nowBox = null;
             return;
         }
 
@@ -41,5 +45,10 @@ public class CharacterInventory : MonoBehaviour
                 _nowBox.Show();
             }
         }
+    }
+
+    private void OpenContainer(Container container)
+    {
+
     }
 }

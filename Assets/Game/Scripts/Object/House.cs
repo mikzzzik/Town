@@ -22,8 +22,7 @@ public class House : ActionObject
         _collider.enabled = false;
 
 
-        CharacterMoving.OnSetNewPosition(_enterPosition.position);
-        CharacterMoving.OnMove();
+
 
       //  Character.OnSetHouse(this);
       //  Character.OnSetPlace(Place.InHouse);

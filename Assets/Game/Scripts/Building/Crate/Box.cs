@@ -8,11 +8,11 @@ public class Box : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        CharacterInteractive.OnBoxTriggerEnter(_boxType);
+        ButtonController.OnBoxTriggerEnter(_boxType);
     }
 
     private void OnTriggerExit(Collider other)
     {
-        CharacterInteractive.OnBoxTriggerEnter(BoxType.none);
+        ButtonController.OnBoxTriggerEnter(BoxType.none);
     }
 }

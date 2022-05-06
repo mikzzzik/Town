@@ -8,19 +8,42 @@ public class ButtonController : MonoBehaviour
 {
     [SerializeField] private Button _actionButton;
     [SerializeField] private Button _pickUpButton;
-    [SerializeField] private Button _openShelfButton;
+    [SerializeField] private Button _openContainerButton;
+    [SerializeField] private Button _inventoryButton;
+
+    [SerializeField] private ContainerUI _containerUI;
+    [SerializeField] private InventoryUI _inventoryUI;
 
     private Action _actionButonAction;
     private BoxType _boxType;
-    private Shelf _shelf;
+    private Container _container;
+
+
+    public static Action<Container> OnContainerTriggerEnter;
+    public static Action<Action> OnInterectivObjectTriggerEnter;
+    public static Action<BoxType> OnBoxTriggerEnter;
+
+
+    private void OnEnable()
+    {
+        OnContainerTriggerEnter += SetContainerButton;
+        OnInterectivObjectTriggerEnter += SetActionButton;
+        OnBoxTriggerEnter += SetPickUpButton;
+    }
+
+    private void OnDisable()
+    {
+        
+    }
 
     void Start()
     {
         _actionButton.onClick.AddListener(ActionButtonClick);
         _pickUpButton.onClick.AddListener(PickUpButtonClick);
+        _openContainerButton.onClick.AddListener(OpenContainerClick);
     }
 
-    public void SetActionButton(Action action)
+    private void SetActionButton(Action action)
     {
         if (action == null) _actionButton.gameObject.SetActive(false);
         else _actionButton.gameObject.SetActive(true);
@@ -28,15 +51,15 @@ public class ButtonController : MonoBehaviour
         _actionButonAction = action;
     }
 
-    public void SetPickUpButton(Shelf shelf)
+    private void SetContainerButton(Container container)
     {
-        if (shelf == null) _openShelfButton.gameObject.SetActive(false);
-        else _openShelfButton.gameObject.SetActive(true);
+        if (container == null) _openContainerButton.gameObject.SetActive(false);
+        else _openContainerButton.gameObject.SetActive(true);
 
-        _shelf = shelf;
+        _container = container;
     }
 
-    public void SetPickUpButton(BoxType boxType)
+    private void SetPickUpButton(BoxType boxType)
     {
         if (boxType == BoxType.none) _pickUpButton.gameObject.SetActive(false);
         else _pickUpButton.gameObject.SetActive(true);
@@ -44,9 +67,9 @@ public class ButtonController : MonoBehaviour
         _boxType = boxType;
     }
 
-    private void OpenShelfClick()
+    private void OpenContainerClick()
     {
-        
+        _containerUI.InitSlots(_container);
     }
 
     private void PickUpButtonClick()

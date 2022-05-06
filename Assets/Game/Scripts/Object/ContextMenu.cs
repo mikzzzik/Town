@@ -100,7 +100,7 @@ public class ContextMenu : MonoBehaviour
 
     public void Move()
     {
-        CharacterMoving.OnMove();
+
         
         Cancel();
     }

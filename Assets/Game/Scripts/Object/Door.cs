@@ -21,8 +21,5 @@ public class Door : MonoBehaviour
         _animator.SetBool("Open", false);
     }
 
-    public void DoorOpened()
-    {
-        CharacterMoving.OnContinueMove();
-    }
+
 }

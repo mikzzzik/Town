@@ -6,13 +6,13 @@ public class ButtonObject : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        CharacterInteractive.OnInterectivObjectTriggerEnter(_interactiveObject.Interactive);
+        ButtonController.OnInterectivObjectTriggerEnter(_interactiveObject.Interactive);
         Debug.Log(other);
     }
 
     private void OnTriggerExit(Collider other)
     {
         Debug.Log("Exit: " + other);
-        CharacterInteractive.OnInterectivObjectTriggerEnter(null);
+        ButtonController.OnInterectivObjectTriggerEnter(null);
     }
 }

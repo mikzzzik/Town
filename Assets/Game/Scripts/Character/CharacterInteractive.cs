@@ -12,7 +12,7 @@ public class CharacterInteractive : MonoBehaviour
 {
     [SerializeField] private ButtonController _buttonController;
 
-    public static Action<Shelf> OnShelfTriggerEnter;
+   /* public static Action<Shelf> OnShelfTriggerEnter;
     public static Action<Action> OnInterectivObjectTriggerEnter;
     public static Action<BoxType> OnBoxTriggerEnter;
 
@@ -46,5 +46,5 @@ public class CharacterInteractive : MonoBehaviour
     private void InteractiveObjectTrigger(Action action)
     {
         _buttonController.SetActionButton(action);
-    }
+    }*/
 }
