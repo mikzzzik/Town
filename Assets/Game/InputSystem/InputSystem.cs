@@ -16,14 +16,11 @@ public class InputSystem : MonoBehaviour
 
 	public void MoveInput(InputAction.CallbackContext context)
 	{
-		
-
 		move = context.ReadValue<Vector2>();
 	}
 
 	public void SprintInput(InputAction.CallbackContext context)
 	{
-		//Debug.Log(context.ReadValue<float>() == 1 ? true : false);
 		sprint = context.ReadValue<float>() == 1 ? true : false;
 	}
 
@@ -31,4 +28,20 @@ public class InputSystem : MonoBehaviour
 	{
 		look = context.ReadValue<Vector2>();
 	}
+
+	public void ActionInput(InputAction.CallbackContext context)
+    {
+		UIController.OnAction();
+    }
+
+	public void Attack(InputAction.CallbackContext context)
+    {
+
+    }
+
+	public void Inventory(InputAction.CallbackContext context)
+    {
+		CharacterInventory.OnShow();
+    }
+
 }

@@ -7,21 +7,66 @@ public class InventoryPanelHolderUI : MonoBehaviour
     [SerializeField] protected SlotContainer _slotContainer;
     [SerializeField] private TextMeshProUGUI _weightText;
 
-    protected List<Item> _itemList;
-    protected List<int> _itemAmountList;
+    [SerializeField] protected List<Item> _itemList;
 
     private float _maxWeight;
+    private float _nowWeight;
 
-    public void SetWeight(int weight)
+    private void UpdateWeightText()
+    { 
+        _nowWeight = _slotContainer.CalcWeight();
+
+        _weightText.text = string.Format("{0}/{1} kg", _nowWeight, _maxWeight);
+    }
+
+    public void SetMaxWeight(float maxWeight)
     {
-        _weightText.text = string.Format("{0}, {1},kg", weight, _maxWeight);
+        _maxWeight = maxWeight;
+    }
+    
+    public float GetAvailableWeight()
+    {
+        return _maxWeight - _nowWeight;
+    }
+
+    public bool CheckWeight(Item oldItem, Item newItem)
+    {
+        float weight = 0f;
+
+        for(int i = 0; i < _itemList.Count;i++)
+        {
+            if(_itemList[i] != oldItem)
+            {
+                if (_itemList[i].item != null)
+                    weight += _itemList[i].item.Weight * _itemList[i].amount;
+            }
+            else
+            {
+                if (newItem.item != null)
+                    weight += newItem.item.Weight * newItem.amount;
+            }
+        }
+
+        if (weight <= _maxWeight)
+        {
+            return true;
+        }
+        else return false;
     }
 
     protected void ShowPanel()
     {
-        gameObject.SetActive(true);
+        UIController.OnChangeStatusPanel(gameObject);
+        UIController.OnChangeStatusInteractiveText(false, null);
 
-        _slotContainer.SetItems(_itemList, _itemAmountList);
+        UpdateUI(); 
+    }
+
+    public void UpdateUI()
+    {
+        _slotContainer.SetItems(_itemList);
+
+        UpdateWeightText();
     }
 
 }

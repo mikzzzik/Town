@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - InHouse
+  - Interactive
   layers:
   - Default
   - TransparentFX

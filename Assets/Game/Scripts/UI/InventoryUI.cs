@@ -5,15 +5,14 @@ using TMPro;
 
 public class InventoryUI : InventoryPanelHolderUI
 {
-    [SerializeField] private TextMeshProUGUI _weightText;
+    [SerializeField] private CharacterInventory _characterInventory;
 
-    public void InitSlots(List<Item> itemList, List<int> itemAmountList)
+    public void InitSlots(List<Item> itemList,  float maxWeight)
     {
         _itemList = itemList;
-        _itemAmountList = itemAmountList;
+
+        SetMaxWeight(maxWeight);
 
         ShowPanel();
     }
-
-
 }

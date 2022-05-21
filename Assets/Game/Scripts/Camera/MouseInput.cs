@@ -1,7 +1,6 @@
-using System.Collections.Generic;
 using UnityEngine;
-
-
+using Cinemachine;
+using System;
 public class MouseInput : MonoBehaviour
 {
     [SerializeField] private Camera _mainCamera;
@@ -12,11 +11,7 @@ public class MouseInput : MonoBehaviour
     [Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
     [SerializeField] private GameObject _cinemachineCameraTarget;
 
-    // cinemachine
-    private float _cinemachineTargetYaw;
-    private float _cinemachineTargetPitch;
-
-    private const float _threshold = 0.01f;
+    [SerializeField] private  CinemachineVirtualCamera _virtualCamera;
     
     [Tooltip("For locking the camera position on all axis")]
     [SerializeField] private bool LockCameraPosition = false;
@@ -30,17 +25,90 @@ public class MouseInput : MonoBehaviour
     [Tooltip("Additional degress to override the camera. Useful for fine tuning camera position when locked")]
     [SerializeField] private float _cameraAngleOverride = 0.0f;
 
+    // cinemachine
+    private float _cinemachineTargetYaw;
+    private float _cinemachineTargetPitch;
+
+    private bool _status = true;
+    private bool _interactiveStatus = false;
+    private const float _threshold = 0.01f;
+
+    private GameObject _gameObjectLastHit;
+
+    public static Action<bool> OnChangeStatus;
+
+    private void OnEnable()
+    {
+        OnChangeStatus += ChangeStatus;
+    }
+
+    private void OnDisable()
+    {
+        OnChangeStatus += ChangeStatus;
+    }
+
+    private void ChangeStatus(bool status)
+    {
+        _status = status;
+
+        if(!_status)
+            _gameObjectLastHit = null;
+    }
+
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
-
+      
     }
 
-    
+    private void RayCastCamera()
+    {
+        Debug.DrawRay(transform.position, transform.forward * 2.6f, Color.red);
+        
+        RaycastHit hit;
+
+        // Does the ray intersect any objects excluding the player layer
+        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, 2.6f))
+        {
+            if (hit.collider.tag != "Interactive")
+            {
+                Debug.Log(hit.collider.tag);
+
+                return;
+            }
+
+            if (hit.collider.gameObject == _gameObjectLastHit) return;
+
+            _gameObjectLastHit = hit.collider.gameObject;
+
+            UIController.OnChangeStatusInteractiveText(true, () => hit.collider.SendMessage("Interactive"));
+            _interactiveStatus = true;
+            Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
+           
+            Debug.Log("Did Hit");
+        }
+        else if(_gameObjectLastHit != null || _interactiveStatus && _gameObjectLastHit == null)
+        {
+            _gameObjectLastHit = null;
+
+            _interactiveStatus = false;
+            
+            UIController.OnChangeStatusInteractiveText(false, null);
+        }
+    }
+
+    private void Update()
+    {
+        if (_status)
+            RayCastCamera();
+
+       //   CameraRotation();
+    }
+
     void LateUpdate()
     {
-        CameraRotation();
-     
+        if(_status)
+            CameraRotation();
     }
 
     private void CameraRotation()
@@ -48,8 +116,8 @@ public class MouseInput : MonoBehaviour
         // if there is an input and camera position is not fixed
         if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition)
         {
-            _cinemachineTargetYaw += _input.look.x* Time.deltaTime * 6;
-            _cinemachineTargetPitch += _input.look.y * Time.deltaTime * 6;
+            _cinemachineTargetYaw += _input.look.x* Time.fixedDeltaTime*2;
+            _cinemachineTargetPitch += -_input.look.y * Time.fixedDeltaTime*2;
         }
 
         // clamp our rotations so our values are limited 360 degrees

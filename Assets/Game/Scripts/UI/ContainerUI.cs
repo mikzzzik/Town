@@ -9,6 +9,9 @@ public class ContainerUI : InventoryPanelHolderUI
 
     [SerializeField] private ContainerType _containerType;
 
+    [SerializeField] private Container _container;
+
+
     [SerializeField] private int _slotSize = 75;
     [SerializeField] private int _slotSpace = 2;
     [SerializeField] private int _panelSpace = 5;
@@ -17,6 +20,8 @@ public class ContainerUI : InventoryPanelHolderUI
     public void InitSlots(Container container)
     {
         _containerType = container.GetContaineType();
+        
+        _container = container;
 
         int width = ((_slotSpace + _slotSize) * _containerType.ColumnAmount) + 2;
         int height = ((_slotSpace + _slotSize) * _containerType.RowAmount) + 2;
@@ -29,8 +34,12 @@ public class ContainerUI : InventoryPanelHolderUI
         _slotContainer.InitSlots(_containerType.RowAmount * _containerType.ColumnAmount);
 
         _itemList = container.GetItemList();
-        _itemAmountList = container.GetAmountItemList();
+
+
+        SetMaxWeight(_containerType.MaxWeight);
 
         ShowPanel();
+
+        CharacterInventory.OnShow();
     }
 }

@@ -8,16 +8,17 @@ public class SlotContainer : MonoBehaviour
     [SerializeField] private Slot _slotPrefab;
 
     private List<Item> _itemList;
-    private List<int> _itemAmountList;
 
-    private void CalcWeight()
+    public float CalcWeight()
     {
         float weight = 0f;
-        for(int i =0; i < _slotList.Count; i++)
-        {
-            weight += _itemList[i].Weight * _itemAmountList[i];
-        }
 
+        for(int i = 0; i < _slotList.Count; i++)
+        {
+            if(_itemList[i].item != null)
+             weight += _itemList[i].item.Weight * _itemList[i].amount;
+        }
+        return weight;
 
     }
 
@@ -48,26 +49,24 @@ public class SlotContainer : MonoBehaviour
 
             _slotList.Add(slot);
 
-            slot.transform.parent = this.transform;
+            slot.transform.SetParent(this.transform, false);
+
+            slot.ClearSlot();
         }
     }
 
-    public void SetItems(List<Item> itemList, List<int> itemAmountList)
+    public void SetItems(List<Item> itemList)
     {
         _itemList = itemList;
-        _itemAmountList = itemAmountList;
-        
+
         UpdateAllUI();
     }
 
     private void UpdateAllUI()
     {
-         CalcWeight();
-
-       for(int i = 0; i < _slotList.Count; i++)
+        for (int i = 0; i < _slotList.Count; i++)
         {
-
-            _slotList[i].UpdateInfo(_itemList[i].Icon, _itemAmountList[i]);
+            _slotList[i].UpdateInfo(_itemList[i]);
         }
     }
 }
