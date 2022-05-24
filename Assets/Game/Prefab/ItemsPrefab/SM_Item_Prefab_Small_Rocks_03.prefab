@@ -128,5 +128,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _status: 0
   _item:
-    item: {fileID: 11400000, guid: 32c4a5c9d26467943b45b14bdb79f8d8, type: 2}
-    amount: 2
+    ItemObject: {fileID: 11400000, guid: 32c4a5c9d26467943b45b14bdb79f8d8, type: 2}
+    Amount: 2

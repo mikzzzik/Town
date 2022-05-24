@@ -24,20 +24,20 @@ public class CharacterInventory : MonoBehaviour
     {
         Item nowItem = pickUpItem.GetItem();
         
-        if (nowItem.item.Weight * nowItem.amount+ _itemWeight < _maxWeight)
+        if (nowItem.ItemObject.Weight * nowItem.Amount+ _itemWeight < _maxWeight)
         {
             for (int i = 0; i < _itemList.Count;i++)
             {
-                if (nowItem.item == _itemList[i].item)
+                if (nowItem.ItemObject == _itemList[i].ItemObject)
                 {
-                    _itemList[i].amount += nowItem.amount;
+                    _itemList[i].Amount += nowItem.Amount;
 
                     pickUpItem.PickUp();
 
                     break;
 
                 }
-                else if (_itemList[i].item == null)
+                else if (_itemList[i].ItemObject == null)
                 {
                     _itemList[i] = nowItem;
 
@@ -64,8 +64,8 @@ public class CharacterInventory : MonoBehaviour
 
         for (int i = 0; i < _itemList.Count; i++)
         {
-            if(_itemList[i].item != null)
-                _itemWeight += _itemList[i].item.Weight * _itemList[i].amount;
+            if(_itemList[i].ItemObject != null)
+                _itemWeight += _itemList[i].ItemObject.Weight * _itemList[i].Amount;
         }
     }
 
@@ -92,6 +92,11 @@ public class CharacterInventory : MonoBehaviour
         OnPickUpItem -= PickUpItem;
         OnChooseBox -= ChooseBox;
         OnShow -= Show;
+    }
+
+    public List<Item> GetItemList()
+    {
+        return _itemList;
     }
 
     public BoxCarrying GetBox()

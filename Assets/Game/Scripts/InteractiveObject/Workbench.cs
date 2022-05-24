@@ -9,6 +9,7 @@ public class Workbench : InteractiveObject
     protected override void Active() 
     {
         base.Active();
+
         _workbenchUI.Init(_itemList);
     }
 }

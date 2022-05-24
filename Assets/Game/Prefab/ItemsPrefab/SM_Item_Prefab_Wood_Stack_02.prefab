@@ -99,8 +99,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _status: 0
   _item:
-    item: {fileID: 11400000, guid: 7da9b3751d71f0d419ad4280a14cd7cb, type: 2}
-    amount: 2
+    ItemObject: {fileID: 11400000, guid: 7da9b3751d71f0d419ad4280a14cd7cb, type: 2}
+    Amount: 2
 --- !u!64 &1702340377835019693
 MeshCollider:
   m_ObjectHideFlags: 0

@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class ItemScriptableObject : ScriptableObject
 {
-    public enum ItemType {Common, Resource, Tools}
+
     public ItemType Type;
 
     public string Name;
@@ -20,29 +20,30 @@ public class ItemScriptableObject : ScriptableObject
     public GameObject ObjectPrefab;
 
     public List<Item> ItemToCraft;
-
-    public int craftAmount;
+    public float TimeToCraft;
+    public int CraftAmount;
 }
 [System.Serializable]
 public class Item
 {
-    public ItemScriptableObject item;
-    public int amount;
+    public ItemScriptableObject ItemObject;
+    public int Amount;
 
     public void SetItem(ItemScriptableObject itemObject, int newAmount)
     {
-        item = itemObject;
-        amount = newAmount;
+        ItemObject = itemObject;
+        Amount = newAmount;
     }
     public void SetItem(Item newItem)
     {
-        item = newItem.item;
-        amount = newItem.amount;
+        ItemObject = newItem.ItemObject;
+        Amount = newItem.Amount;
     }
 
     public void Clear()
     {
-        item = null;
-        amount = 0;
+        ItemObject = null;
+        Amount = 0;
     }
 }
+public enum ItemType {None, Common, Resource, Tools }

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a7a2db79012e6c4392423f931ccd8b1, type: 3}
   m_Name: Wood
   m_EditorClassIdentifier: 
-  Type: 1
+  Type: 2
   Name: Wood
   Description: Gather from tree
   Weight: 0.25
@@ -21,3 +21,4 @@ MonoBehaviour:
   Icon: {fileID: 21300000, guid: 333942d970d1d014bb3516b674e4e611, type: 3}
   ObjectPrefab: {fileID: 1691936355131247171, guid: d431fddec9601dc4e8d24dfac4133811, type: 3}
   ItemToCraft: []
+  craftAmount: 0

@@ -25,6 +25,8 @@ public class MouseInput : MonoBehaviour
     [Tooltip("Additional degress to override the camera. Useful for fine tuning camera position when locked")]
     [SerializeField] private float _cameraAngleOverride = 0.0f;
 
+    [SerializeField] private GameObject _headTransform;
+
     // cinemachine
     private float _cinemachineTargetYaw;
     private float _cinemachineTargetPitch;
@@ -63,12 +65,13 @@ public class MouseInput : MonoBehaviour
 
     private void RayCastCamera()
     {
-        Debug.DrawRay(transform.position, transform.forward * 2.6f, Color.red);
-        
+        Debug.DrawRay(transform.position, transform.forward * 3, Color.red);
+      //  Debug.DrawRay(_headTransform.transform.position, transform.forward * 2.8f, Color.red);
+
         RaycastHit hit;
 
         // Does the ray intersect any objects excluding the player layer
-        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, 2.6f))
+        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, 2.8f))
         {
             if (hit.collider.tag != "Interactive")
             {
