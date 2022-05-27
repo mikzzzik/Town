@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+/*using System.Collections.Generic;
 using UnityEngine;
 
 using System;
@@ -22,7 +22,7 @@ public class ContextMenu : MonoBehaviour
     public static Action<Action> OnSetAction;
 
     private List<ContextAction> _contextActionList;
-    private List<ActionButton> _activeActionButton = new List<ActionButton>();
+
 
     private void Start()
     {
@@ -111,3 +111,4 @@ public class ContextMenu : MonoBehaviour
         _panelTransform.gameObject.SetActive(false);
     }
 }
+*/

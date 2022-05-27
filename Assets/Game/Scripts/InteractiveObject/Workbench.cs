@@ -11,5 +11,6 @@ public class Workbench : InteractiveObject
         base.Active();
 
         _workbenchUI.Init(_itemList);
+     
     }
 }

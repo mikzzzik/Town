@@ -6,6 +6,9 @@ using TMPro;
 
 public class CraftItemInfoContainer : MonoBehaviour
 {
+    [SerializeField] private CharacterInventory _characterInventory;
+    [SerializeField] private InventoryPanelHolderUI _inventoryPanelHolerUI;
+
     [SerializeField] private WorkbenchUI _workbenchUI;
 
     [SerializeField] private TextMeshProUGUI _buttonText;
@@ -17,10 +20,14 @@ public class CraftItemInfoContainer : MonoBehaviour
     [SerializeField] private Image _itemIcon;
     [SerializeField] private Image _progressBar;
 
+    [SerializeField] private List<SlotHolder> _slotHolderList;
+
+    private int _slotIndex;
+
     private float _timer;
+    private ItemScriptableObject _itemObject;
 
     private bool _status = true;
-    private bool _complete = false;
 
     private void OnDisable()
     {
@@ -29,14 +36,18 @@ public class CraftItemInfoContainer : MonoBehaviour
 
     public void Init(ItemScriptableObject itemObject)
     {
+        StopAllCoroutines();
+
+        _itemObject = itemObject;
+
         gameObject.SetActive(true);
 
-        _timerText.text = itemObject.TimeToCraft.ToString();
-        _itemNameText.text = itemObject.Name.ToString();
-        _itemDescriptionText.text = itemObject.Description.ToString();
-        _itemAmountText.text = itemObject.CraftAmount.ToString();
+        _timerText.text = _itemObject.TimeToCraft.ToString();
+        _itemNameText.text = _itemObject.Name.ToString();
+        _itemDescriptionText.text = _itemObject.Description.ToString();
+        _itemAmountText.text = _itemObject.CraftAmount.ToString();
       
-        _itemIcon.sprite = itemObject.Icon;
+        _itemIcon.sprite = _itemObject.Icon;
         _progressBar.fillAmount = 1f;
     }
     private void Start()
@@ -52,11 +63,6 @@ public class CraftItemInfoContainer : MonoBehaviour
 
     public void Click()
     {
-        if (_complete)
-        {
-            Complete();
-            return;
-        }
 
         if (_status)
         {
@@ -70,28 +76,38 @@ public class CraftItemInfoContainer : MonoBehaviour
 
     public void ChangeStatus(bool status)
     {
-
-
         _status = status;
     }
 
     private void Craft()
     {
-        ChangeStatus(false);
-        StartCoroutine(DoCraft());
+        for(int i = 0; i < _slotHolderList.Count; i++)
+        {
+            Debug.Log(_slotHolderList[i].GetItem().ItemObject);
+            if(_slotHolderList[i].GetItem().ItemObject == null)
+            {
+                ChangeStatus(false);
+                
+                _slotIndex = i;
 
+                _timer = _itemObject.TimeToCraft;
+
+                StartCoroutine(DoCraft());
+
+                return;
+            }
+        }
+        Debug.Log("You don't have free slots");
+       
     }
 
     private void Cancel()
     {
         StopAllCoroutines();
+
         ChangeStatus(true);
     }
 
-    private void Complete()
-    {
-
-    }
     IEnumerator DoCraft()
     {
         float nowTimer = _timer;
@@ -106,6 +122,48 @@ public class CraftItemInfoContainer : MonoBehaviour
             yield return new WaitForSeconds(.1f);
         }
 
-        _complete = true;
+        if (nowTimer <= 0)
+        {
+            Crafted();
+        }
+    }
+
+    private void Crafted()
+    {
+        List<Item> characterItemList = _characterInventory.GetItemList();
+
+        Item tempItem = new Item();
+
+        tempItem.SetItem(_itemObject, _itemObject.CraftAmount);
+
+        for (int i = 0; i < _itemObject.ItemToCraft.Count; i++)
+        {
+            int needAmount = _itemObject.ItemToCraft[i].Amount;
+            for (int j = 0; j < characterItemList.Count; j++)
+            {
+                if (_itemObject.ItemToCraft[i].ItemObject == characterItemList[j].ItemObject)
+                {
+                    if(characterItemList[j].Amount > needAmount)
+                    {
+                        characterItemList[j].Amount -= needAmount;
+                    }
+                    else
+                    {
+                        needAmount -= characterItemList[j].Amount;
+                        characterItemList[j].Clear();
+                    }
+                }
+            }
+        }
+
+        _workbenchUI.UpdateViewAfterCraft();
+
+
+        _progressBar.fillAmount = 1f;
+        _timerText.text = _itemObject.TimeToCraft.ToString();
+
+        _inventoryPanelHolerUI.UpdateUI();
+        
+        _slotHolderList[_slotIndex].UpdateInfo(tempItem);
     }
 }

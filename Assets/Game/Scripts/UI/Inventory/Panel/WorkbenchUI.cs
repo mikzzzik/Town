@@ -20,9 +20,12 @@ public class WorkbenchUI : MonoBehaviour
 
     [SerializeField] private List<Item> _itemList = new List<Item>();
     [SerializeField] private List<NeedItemHolder> _needItemHolder = new List<NeedItemHolder>();
-    public static Action<Item, int,int> OnClickSlotCraft;
+
+    public static Action<Item,bool, int,int> OnClickSlotCraft;
 
     private Item _item;
+
+    [SerializeField] private List<SlotCraft> _slotCraftList;
 
     [System.Serializable]
     public struct CraftebleType
@@ -42,7 +45,7 @@ public class WorkbenchUI : MonoBehaviour
         OnClickSlotCraft -= ClickSlot;
     }
 
-    private void ClickSlot(Item item, int typeIndex, int slotIndex)
+    private void ClickSlot(Item item, bool status, int typeIndex, int slotIndex)
     {
         _craftItemInfoContainer.Init(item.ItemObject);
 
@@ -104,6 +107,94 @@ public class WorkbenchUI : MonoBehaviour
 
         _itemList.Clear();
     }
+    private bool CanCraft(ItemScriptableObject itemObject)
+    {
+        bool status = false;
+
+        for (int i = 0; i < itemObject.ItemToCraft.Count; i++)
+        {
+            status = false;
+
+            for (int j = 0; j < _itemList.Count; j++)
+            {
+                if (_itemList[j].ItemObject == itemObject.ItemToCraft[i].ItemObject)
+                {
+                    if (_itemList[j].Amount < itemObject.ItemToCraft[i].Amount)
+                    {
+                        return false;
+                    }
+                    else status = true;
+                }
+            }
+        }
+
+        return status;
+    }
+
+    public void ChooseType(ItemType itemType)
+    {
+
+        if (itemType == _nowItemType) return;
+
+        _nowItemType = itemType;
+
+        UpdateItemListView();
+    }
+
+    private void UpdateItemListView()
+    {
+        _craftItemInfoContainer.Hide();
+        _slotCraftList.Clear();
+
+        _itemView.SetActive(true);
+
+        int count = _contentHolder.childCount;
+
+        for (int i = 0; i < count; i++)
+        {
+
+            Destroy(_contentHolder.GetChild(i).gameObject);
+        }
+
+         for (int i = 0; i < _typeList.Count; i++)
+        {
+            if (_nowItemType == _typeList[i].Type)
+            {
+                for (int j = 0; j < _typeList[i].ItemObjectList.Count; j++)
+                {
+                    SlotCraft tempSlot = Instantiate(_slotPrefab) as SlotCraft;
+
+                    tempSlot.transform.SetParent(_contentHolder);
+
+                    _item = new Item();
+
+                    _item.SetItem(_typeList[i].ItemObjectList[j], _typeList[i].ItemObjectList[j].CraftAmount);
+                    
+                    _slotCraftList.Add(tempSlot);
+
+                    tempSlot.Init(_item, _typeList[i].CanCraft[j], i, j);
+                }
+                break;
+            }
+        }
+    }
+
+    public void UpdateViewAfterCraft()
+    {
+        CalcItem();
+
+        for (int i = 0; i < _typeList.Count; i++)
+        {
+            if (_nowItemType == _typeList[i].Type)
+            {
+                for (int j = 0; j < _typeList[i].ItemObjectList.Count; j++)
+                {
+                    _slotCraftList[j].Init(_item, _typeList[i].CanCraft[j], i, j);
+                }
+                break;
+            }
+        }
+    }
 
     private void CalcItem()
     {
@@ -134,54 +225,9 @@ public class WorkbenchUI : MonoBehaviour
         }
     }
 
-    private bool CanCraft(ItemScriptableObject itemObject)
+
+    public void UpdateCanCraft()
     {
-        bool status = false;
-
-        for(int i = 0; i < itemObject.ItemToCraft.Count;i++)
-        {
-            status = false;
-
-            for (int j = 0; j < _itemList.Count;j++)
-            {
-                if(_itemList[j].ItemObject == itemObject.ItemToCraft[i].ItemObject)
-                {
-                    if (_itemList[j].Amount < itemObject.ItemToCraft[i].Amount)
-                    {
-                        return false;
-                    }
-                    else status = true;
-                }
-            }
-        }
-
-        return status;
-    }
-
-    public void ChooseType(ItemType itemType)
-    {
-
-        if (itemType == _nowItemType) return;
-
-        _nowItemType = itemType;
-
-        UpdateItemListView();
-    }
-
-    private void UpdateItemListView()
-    {
-        _craftItemInfoContainer.Hide();
-
-        _itemView.SetActive(true);
-
-        int count = _contentHolder.childCount;
-
-        for (int i = 0; i < count; i++)
-        {
-
-            Destroy(_contentHolder.GetChild(i).gameObject);
-        }
-
         for (int i = 0; i < _typeList.Count; i++)
         {
             if (_nowItemType == _typeList[i].Type)
@@ -202,10 +248,6 @@ public class WorkbenchUI : MonoBehaviour
             }
         }
     }
-    public Item GetItem()
-    {
-        return _item;
-    }
 
     private void ShowPanel()
     {
@@ -213,10 +255,7 @@ public class WorkbenchUI : MonoBehaviour
 
         UIController.OnChangeStatusInteractiveText(false, null);
 
-    }
-
-    public void  CraftItem()
-    {
+        CharacterInventory.OnShow();
 
     }
 }

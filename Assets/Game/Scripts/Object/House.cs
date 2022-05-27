@@ -13,7 +13,7 @@ public class House : ActionObject
     {
         base.Action();
 
-        ContextMenu.OnSetAction(Enter);
+    //    ContextMenu.OnSetAction(Enter);
     }
 
     private void Enter()

@@ -498,6 +498,7 @@ MonoBehaviour:
   _itemIcon: {fileID: 3288873122020889474}
   _itemAmountText: {fileID: 6215083740612765801}
   _itemWeightText: {fileID: 80631371315693768}
+  _slotType: 3
   _nowItem:
     ItemObject: {fileID: 0}
     Amount: 0

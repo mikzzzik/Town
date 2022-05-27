@@ -8,6 +8,8 @@ public class Slot : MonoBehaviour
     [SerializeField] protected TextMeshProUGUI _itemAmountText;
     [SerializeField] private TextMeshProUGUI _itemWeightText;
 
+
+    [SerializeField] private SlotType _slotType;
     [SerializeField] protected Item _nowItem;
     
     public void UpdateInfo(Item item)
@@ -32,7 +34,17 @@ public class Slot : MonoBehaviour
     {
         ChangeStatus(false);
 
+        if(_nowItem.ItemObject == null)
+        {
+            _nowItem.Clear();
+        }
+
         _itemAmountText.text = "0";
+    }
+
+    public SlotType GetSlotType()
+    {
+        return _slotType;
     }
 
     public Item GetItem()

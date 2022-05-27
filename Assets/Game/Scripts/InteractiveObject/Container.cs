@@ -42,21 +42,7 @@ public class Container : InteractiveObject
 
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if(other.gameObject.tag == "Player")
-        {
-           ButtonController.OnContainerTriggerEnter(this);
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.tag == "Player")
-         
-            ButtonController.OnContainerTriggerEnter(null);
-    }
-
+   
     protected override void Active()
     {
         base.Active();

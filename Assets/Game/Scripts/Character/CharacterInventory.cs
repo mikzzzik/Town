@@ -6,16 +6,13 @@ public class CharacterInventory : MonoBehaviour
 {
     [SerializeField] private float _maxWeight;
 
-    [SerializeField] private List<BoxCarrying> _boxCarryingList;
+
     [SerializeField] private List<Item> _itemList;
 
     [SerializeField] private InventoryUI _inventoryUI;
 
     private float _itemWeight;
 
-    private BoxCarrying _nowBox;
-
-    public static Action<BoxType> OnChooseBox;
     public static Action<Container> OnOpenContainer;
     public static Action OnShow;
     public static Action<PickUpItem> OnPickUpItem;
@@ -80,17 +77,17 @@ public class CharacterInventory : MonoBehaviour
 
     private void OnEnable()
     {
-        OnOpenContainer += OpenContainer;
+
         OnPickUpItem += PickUpItem;
-        OnChooseBox += ChooseBox;
+
         OnShow += Show;
     }
 
     private void OnDisable()
     {
-        OnOpenContainer -= OpenContainer;
+
         OnPickUpItem -= PickUpItem;
-        OnChooseBox -= ChooseBox;
+
         OnShow -= Show;
     }
 
@@ -99,32 +96,4 @@ public class CharacterInventory : MonoBehaviour
         return _itemList;
     }
 
-    public BoxCarrying GetBox()
-    {
-        return _nowBox;
-    }
-
-    private void ChooseBox(BoxType boxType)
-    {
-        if (boxType == BoxType.none)
-        {
-            _nowBox = null;
-            return;
-        }
-
-        for (int i = 0; i < _boxCarryingList.Count; i++)
-        {
-            if (boxType == _boxCarryingList[i].GetBoxType())
-            {
-                _nowBox = _boxCarryingList[i];
-
-                _nowBox.Show();
-            }
-        }
-    }
-
-    private void OpenContainer(Container container)
-    {
-
-    }
 }

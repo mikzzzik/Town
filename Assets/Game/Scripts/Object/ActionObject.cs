@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 
 public class ActionObject : MonoBehaviour
 {
-    [SerializeField] protected List<ContextAction> _contextActionList;
+   // [SerializeField] protected List<ContextAction> _contextActionList;
 
     private void OnMouseDown()
     {
@@ -14,6 +14,6 @@ public class ActionObject : MonoBehaviour
 
     protected virtual void Action()
     {
-        ContextMenu.OnShowContextMenu(_contextActionList);
+   //     ContextMenu.OnShowContextMenu(_contextActionList);
     }
 }

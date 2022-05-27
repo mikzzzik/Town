@@ -1,18 +1,19 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
-public enum SlotType { Inventory, Container };
+public enum SlotType { Inventory, Container, Workbench, Craft };
 
 public class UIController : MonoBehaviour
 {
     [SerializeField] private GameObject _interactiveTextGameObject;
-
+    [SerializeField] private GameObject _pauseMenu;
     private List<GameObject> _panelObjectList = new List<GameObject>();
 
     public static Action<bool, Action> OnChangeStatusInteractiveText;
     public static Action<GameObject> OnChangeStatusPanel;
     public static Action OnAction;
-    
+    public static Action OnPressEsc;
+
     private Action _nowAction;
 
     private void OnEnable()
@@ -20,6 +21,7 @@ public class UIController : MonoBehaviour
         OnChangeStatusInteractiveText += ChangeStatus;
         OnChangeStatusPanel += ChangePanelStatus;
         OnAction += Action;
+        OnPressEsc += PauseMenu;
     }
 
     private void OnDisable()
@@ -27,6 +29,7 @@ public class UIController : MonoBehaviour
         OnChangeStatusInteractiveText -= ChangeStatus;
         OnChangeStatusPanel -= ChangePanelStatus;
         OnAction -= Action;
+        OnPressEsc -= PauseMenu;
     }
 
     private void ChangeStatus(bool status, Action action)
@@ -84,7 +87,31 @@ public class UIController : MonoBehaviour
         if(_panelObjectList.Count <= 0)
         {
             MouseInput.OnChangeStatus(true);
+            Debug.Log("GG");
             Cursor.lockState = CursorLockMode.Locked;
+        }
+    }
+
+    private void PauseMenu()
+    {
+        if(_panelObjectList.Count <= 0)
+        {
+                ShowPanel(_pauseMenu);
+        }
+        else
+        {
+            HideAllPanel();
+            CheckPanel();
+        }
+    }
+
+    private void HideAllPanel()
+    {
+        for(int i = 0; i < _panelObjectList.Count; i++)
+        {
+            
+            _panelObjectList[0].SetActive(false);
+            _panelObjectList.RemoveAt(0);
         }
     }
 }

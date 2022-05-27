@@ -3,6 +3,8 @@ using UnityEngine;
 using System;
 using UnityEngine.InputSystem;
 
+
+
 public class SlotDraggable : MonoBehaviour
 {
     [SerializeField] private Image _imageItem;
@@ -61,7 +63,9 @@ public class SlotDraggable : MonoBehaviour
 
     private void EndDrag()
     {
-       Item currentItem  = _currentSlot.GetItem();
+        if (_currentSlot == null) return;
+        
+        Item currentItem = _currentSlot.GetItem();
         Item newItem = _newSlot.GetItem();
 
         if (_newSlot == null || _newSlot == _currentSlot)
@@ -69,60 +73,82 @@ public class SlotDraggable : MonoBehaviour
             Clear();
             return;
         }
-        InventoryPanelHolderUI currentInventoryPanelHolder = _currentSlot.transform.GetComponentInParent<InventoryPanelHolderUI>();
-        InventoryPanelHolderUI newInventoryPanelHolder = _newSlot.transform.GetComponentInParent<InventoryPanelHolderUI>();
 
-        if (currentInventoryPanelHolder == newInventoryPanelHolder)
+        if (_newSlot.GetSlotType() == SlotType.Workbench)
+            return;
+
+            InventoryPanelHolderUI newInventoryPanelHolder = _newSlot.transform.GetComponentInParent<InventoryPanelHolderUI>();
+
+        if (_currentSlot.GetSlotType() == SlotType.Workbench)
         {
-            Debug.Log(true);
-            if (currentItem.ItemObject != newItem.ItemObject)
+            if (newInventoryPanelHolder.GetAvailableWeight() > currentItem.ItemObject.Weight * currentItem.Amount)
             {
-                Debug.Log("Same");
-                ItemSwitch();
-            }
-            else
-            {
-                Debug.Log("Different");
-               newItem.Amount += currentItem.Amount;
-                _currentSlot.GetItem().Clear();
-            }
-           
+                newItem.SetItem(currentItem);
 
-            currentInventoryPanelHolder.UpdateUI();
+                newInventoryPanelHolder.UpdateUI();
+
+                _currentSlot.ClearSlot();
+
+                Clear();
+
+            }
         }
         else
         {
-            if(currentItem.ItemObject == newItem.ItemObject)
+
+
+            InventoryPanelHolderUI currentInventoryPanelHolder = _currentSlot.transform.GetComponentInParent<InventoryPanelHolderUI>();
+
+
+            if (currentInventoryPanelHolder == newInventoryPanelHolder)
             {
-                float availebleWeight = newInventoryPanelHolder.GetAvailableWeight();
-
-                if (availebleWeight >= currentItem.ItemObject.Weight)
+                Debug.Log(true);
+                if (currentItem.ItemObject != newItem.ItemObject)
                 {
-                    if (availebleWeight >= currentItem.ItemObject.Weight * currentItem.Amount)
-                    {
-                        newItem.Amount += currentItem.Amount;
-                        _currentSlot.GetItem().Clear();
-                    }
-                    else
-                    {
-                        int amountItem = (int)(availebleWeight / currentItem.ItemObject.Weight);
+                    ItemSwitch();
+                }
+                else
+                {
+                    newItem.Amount += currentItem.Amount;
 
-                        currentItem.Amount -= amountItem;
-                        newItem.Amount += amountItem;
+                    _currentSlot.GetItem().Clear();
+                }
+                currentInventoryPanelHolder.UpdateUI();
+            }
+            else
+            {
+                if (currentItem.ItemObject == newItem.ItemObject)
+                {
+                    float availebleWeight = newInventoryPanelHolder.GetAvailableWeight();
+
+                    if (availebleWeight >= currentItem.ItemObject.Weight)
+                    {
+                        if (availebleWeight >= currentItem.ItemObject.Weight * currentItem.Amount)
+                        {
+                            newItem.Amount += currentItem.Amount;
+                            _currentSlot.GetItem().Clear();
+                        }
+                        else
+                        {
+                            int amountItem = (int)(availebleWeight / currentItem.ItemObject.Weight);
+
+                            currentItem.Amount -= amountItem;
+                            newItem.Amount += amountItem;
+                        }
                     }
                 }
-            }
-            else if(currentInventoryPanelHolder.CheckWeight(currentItem, newItem) && newInventoryPanelHolder.CheckWeight(newItem, currentItem))
-            {
-                    ItemSwitch();            
-            }
-            else 
-            {
-                Debug.Log("Can't switch");
-            }
+                else if (currentInventoryPanelHolder.CheckWeight(currentItem, newItem) && newInventoryPanelHolder.CheckWeight(newItem, currentItem))
+                {
+                    ItemSwitch();
+                }
+                else
+                {
+                    Debug.Log("Can't switch");
+                }
 
-            newInventoryPanelHolder.UpdateUI();
-            currentInventoryPanelHolder.UpdateUI();
+                newInventoryPanelHolder.UpdateUI();
+                currentInventoryPanelHolder.UpdateUI();
+            }
         }
 
         Clear();
