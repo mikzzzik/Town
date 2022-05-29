@@ -11,7 +11,7 @@ public class WorkbenchUI : MonoBehaviour
 
     [SerializeField] private SlotCraft _slotPrefab;
 
-    [SerializeField] private List<CraftebleType> _typeList;
+    [SerializeField] private List<CraftebleType> _craftebleTypeList;
 
     [SerializeField] private ItemType _nowItemType;
     [SerializeField] private CraftItemInfoContainer _craftItemInfoContainer;
@@ -20,6 +20,8 @@ public class WorkbenchUI : MonoBehaviour
 
     [SerializeField] private List<Item> _itemList = new List<Item>();
     [SerializeField] private List<NeedItemHolder> _needItemHolder = new List<NeedItemHolder>();
+
+    private CraftebleType _nowCraftebleTypeList;
 
     public static Action<Item,bool, int,int> OnClickSlotCraft;
 
@@ -51,9 +53,11 @@ public class WorkbenchUI : MonoBehaviour
 
         for(int i = 0; i < _needItemHolder.Count; i++)
         {
-            if(i < _typeList[typeIndex].ItemObjectList[slotIndex].ItemToCraft.Count)
+            if(i < _craftebleTypeList[typeIndex].ItemObjectList[slotIndex].ItemToCraft.Count)
             {
-                _needItemHolder[i].Show(_typeList[typeIndex].ItemObjectList[slotIndex].ItemToCraft[i]);
+                _needItemHolder[i].Show(_craftebleTypeList[typeIndex].ItemObjectList[slotIndex].ItemToCraft[i]);
+
+                _craftItemInfoContainer.ChangeButtonStatus(status);
             }
             else
             {
@@ -73,14 +77,14 @@ public class WorkbenchUI : MonoBehaviour
 
         for (int i = 0; i < tempItemList.Count; i++)
         {
-            for(int j = 0; j < _typeList.Count;j++)
+            for(int j = 0; j < _craftebleTypeList.Count;j++)
             {
-                if(tempItemList[i].Type == _typeList[j].Type)
+                if(tempItemList[i].Type == _craftebleTypeList[j].Type)
                 {
                     ItemScriptableObject tempItem = tempItemList[i];
 
-                    _typeList[j].ItemObjectList.Add(tempItem);
-                    _typeList[j].CanCraft.Add(CanCraft(tempItemList[i]));
+                    _craftebleTypeList[j].ItemObjectList.Add(tempItem);
+                    _craftebleTypeList[j].CanCraft.Add(CanCraft(tempItemList[i]));
 
                     tempItemList.Remove(tempItemList[i]);
 
@@ -94,15 +98,16 @@ public class WorkbenchUI : MonoBehaviour
         {
             UpdateItemListView();
         }
+
         ShowPanel();
     }
     
     private void ClearList()
     {
-        for (int i = 0; i < _typeList.Count; i++)
+        for (int i = 0; i < _craftebleTypeList.Count; i++)
         {
-            _typeList[i].ItemObjectList.Clear();
-            _typeList[i].CanCraft.Clear();
+            _craftebleTypeList[i].ItemObjectList.Clear();
+            _craftebleTypeList[i].CanCraft.Clear();
         }
 
         _itemList.Clear();
@@ -133,7 +138,6 @@ public class WorkbenchUI : MonoBehaviour
 
     public void ChooseType(ItemType itemType)
     {
-
         if (itemType == _nowItemType) return;
 
         _nowItemType = itemType;
@@ -149,47 +153,65 @@ public class WorkbenchUI : MonoBehaviour
         _itemView.SetActive(true);
 
         int count = _contentHolder.childCount;
+        Debug.Log("GG");
 
         for (int i = 0; i < count; i++)
         {
-
             Destroy(_contentHolder.GetChild(i).gameObject);
         }
 
-         for (int i = 0; i < _typeList.Count; i++)
+        for (int i = 0; i < _craftebleTypeList.Count; i++)
         {
-            if (_nowItemType == _typeList[i].Type)
+            if (_nowItemType == _craftebleTypeList[i].Type)
             {
-                for (int j = 0; j < _typeList[i].ItemObjectList.Count; j++)
-                {
-                    SlotCraft tempSlot = Instantiate(_slotPrefab) as SlotCraft;
+                InstantiateSlots(i, _craftebleTypeList[i]);
 
-                    tempSlot.transform.SetParent(_contentHolder);
-
-                    _item = new Item();
-
-                    _item.SetItem(_typeList[i].ItemObjectList[j], _typeList[i].ItemObjectList[j].CraftAmount);
-                    
-                    _slotCraftList.Add(tempSlot);
-
-                    tempSlot.Init(_item, _typeList[i].CanCraft[j], i, j);
-                }
+                _nowCraftebleTypeList = _craftebleTypeList[i];
+                
                 break;
             }
         }
     }
 
+    private void InstantiateSlots(int i, CraftebleType craftebleTypeList)
+    {
+        Debug.Log(craftebleTypeList.ItemObjectList.Count);
+        for (int j = 0; j < craftebleTypeList.ItemObjectList.Count; j++)
+        {
+            SlotCraft tempSlot = Instantiate(_slotPrefab) as SlotCraft;
+
+            tempSlot.transform.SetParent(_contentHolder);
+
+            _item = new Item();
+
+            _item.SetItem(craftebleTypeList.ItemObjectList[j], craftebleTypeList.ItemObjectList[j].CraftAmount);
+
+            _slotCraftList.Add(tempSlot);
+
+            tempSlot.Init(_item, craftebleTypeList.CanCraft[j], i, j);
+        }
+    }
+
     public void UpdateViewAfterCraft()
     {
-        CalcItem();
 
-        for (int i = 0; i < _typeList.Count; i++)
+        CalcItem();
+        for(int i = 0; i < _nowCraftebleTypeList.ItemObjectList.Count; i++)
         {
-            if (_nowItemType == _typeList[i].Type)
+            _nowCraftebleTypeList.CanCraft[i] = CanCraft(_nowCraftebleTypeList.ItemObjectList[i]);
+        }
+
+        for (int i = 0; i < _craftebleTypeList.Count; i++)
+        {
+            if (_nowItemType == _craftebleTypeList[i].Type)
             {
-                for (int j = 0; j < _typeList[i].ItemObjectList.Count; j++)
+
+                for (int j = 0; j < _craftebleTypeList[i].ItemObjectList.Count; j++)
                 {
-                    _slotCraftList[j].Init(_item, _typeList[i].CanCraft[j], i, j);
+                    _item = new Item();
+                    _item.SetItem(_craftebleTypeList[i].ItemObjectList[j], _craftebleTypeList[i].ItemObjectList[j].CraftAmount);
+
+                    _slotCraftList[j].Init(_item, _craftebleTypeList[i].CanCraft[j], i, j);
                 }
                 break;
             }
@@ -199,8 +221,9 @@ public class WorkbenchUI : MonoBehaviour
     private void CalcItem()
     {
         List<Item> charactreInventoryList = _characterInventory.GetItemList();
-        
-        for(int i = 0; i < charactreInventoryList.Count;i++)
+        _itemList.Clear();
+
+        for (int i = 0; i < charactreInventoryList.Count;i++)
         {
             bool status = true;
             for(int j = 0; j < _itemList.Count;j++)
@@ -221,30 +244,6 @@ public class WorkbenchUI : MonoBehaviour
                 tempItem.SetItem(charactreInventoryList[i]);
 
                 _itemList.Add(tempItem);
-            }
-        }
-    }
-
-
-    public void UpdateCanCraft()
-    {
-        for (int i = 0; i < _typeList.Count; i++)
-        {
-            if (_nowItemType == _typeList[i].Type)
-            {
-                for (int j = 0; j < _typeList[i].ItemObjectList.Count; j++)
-                {
-                    SlotCraft tempSlot = Instantiate(_slotPrefab) as SlotCraft;
-
-                    tempSlot.transform.SetParent(_contentHolder);
-
-                    _item = new Item();
-
-                    _item.SetItem(_typeList[i].ItemObjectList[j], _typeList[i].ItemObjectList[j].CraftAmount);
-
-                    tempSlot.Init(_item, _typeList[i].CanCraft[j], i, j);
-                }
-                break;
             }
         }
     }

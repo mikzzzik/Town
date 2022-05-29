@@ -94,19 +94,24 @@ public class UIController : MonoBehaviour
 
     private void PauseMenu()
     {
+        ContextMenuUI.OnHide();
+
         if(_panelObjectList.Count <= 0)
         {
-                ShowPanel(_pauseMenu);
+            Debug.Log("11");
+            ShowPanel(_pauseMenu);
         }
         else
         {
             HideAllPanel();
             CheckPanel();
+            Debug.Log("22");
         }
     }
 
     private void HideAllPanel()
     {
+        
         for(int i = 0; i < _panelObjectList.Count; i++)
         {
             

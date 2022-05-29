@@ -11,6 +11,8 @@ public class CraftItemInfoContainer : MonoBehaviour
 
     [SerializeField] private WorkbenchUI _workbenchUI;
 
+    [SerializeField] private Button _button;
+
     [SerializeField] private TextMeshProUGUI _buttonText;
     [SerializeField] private TextMeshProUGUI _timerText;
     [SerializeField] private TextMeshProUGUI _itemNameText;
@@ -81,7 +83,10 @@ public class CraftItemInfoContainer : MonoBehaviour
 
     private void Craft()
     {
-        for(int i = 0; i < _slotHolderList.Count; i++)
+
+        _buttonText.text = "Cancel";
+
+        for (int i = 0; i < _slotHolderList.Count; i++)
         {
             Debug.Log(_slotHolderList[i].GetItem().ItemObject);
             if(_slotHolderList[i].GetItem().ItemObject == null)
@@ -105,6 +110,8 @@ public class CraftItemInfoContainer : MonoBehaviour
     {
         StopAllCoroutines();
 
+        _buttonText.text = "Craft";
+
         ChangeStatus(true);
     }
 
@@ -127,9 +134,16 @@ public class CraftItemInfoContainer : MonoBehaviour
             Crafted();
         }
     }
+    
+    public void ChangeButtonStatus(bool status)
+    {
+        _button.interactable = status;
+    }
 
     private void Crafted()
     {
+        _buttonText.text = "Craft";
+
         List<Item> characterItemList = _characterInventory.GetItemList();
 
         Item tempItem = new Item();
@@ -155,15 +169,13 @@ public class CraftItemInfoContainer : MonoBehaviour
                 }
             }
         }
-
-        _workbenchUI.UpdateViewAfterCraft();
-
-
         _progressBar.fillAmount = 1f;
         _timerText.text = _itemObject.TimeToCraft.ToString();
 
         _inventoryPanelHolerUI.UpdateUI();
         
         _slotHolderList[_slotIndex].UpdateInfo(tempItem);
+
+        _workbenchUI.UpdateViewAfterCraft();
     }
 }

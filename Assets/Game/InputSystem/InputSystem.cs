@@ -41,12 +41,16 @@ public class InputSystem : MonoBehaviour
 
 	public void Escape(InputAction.CallbackContext context)
     {
+		if(context.performed)
 		UIController.OnPressEsc();
+
     }
 
 	public void Inventory(InputAction.CallbackContext context)
     {
-		CharacterInventory.OnShow();
-    }
+		if (context.performed)
+			CharacterInventory.OnShow();
+
+	}
 
 }

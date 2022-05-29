@@ -8,7 +8,6 @@ using UnityEngine.InputSystem;
 public class SlotDraggable : MonoBehaviour
 {
     [SerializeField] private Image _imageItem;
-    [SerializeField] private RectTransform _rectTransform;
 
     [SerializeField] private SlotHolder _currentSlot;
     [SerializeField] private SlotHolder _newSlot;
@@ -63,19 +62,15 @@ public class SlotDraggable : MonoBehaviour
 
     private void EndDrag()
     {
-        if (_currentSlot == null) return;
-        
-        Item currentItem = _currentSlot.GetItem();
-        Item newItem = _newSlot.GetItem();
-
-        if (_newSlot == null || _newSlot == _currentSlot)
+        if (_currentSlot == null || _newSlot == null || _newSlot == _currentSlot || _newSlot.GetSlotType() == SlotType.Workbench)
         {
             Clear();
             return;
         }
 
-        if (_newSlot.GetSlotType() == SlotType.Workbench)
-            return;
+        Item currentItem = _currentSlot.GetItem();
+        Item newItem = _newSlot.GetItem();
+
 
             InventoryPanelHolderUI newInventoryPanelHolder = _newSlot.transform.GetComponentInParent<InventoryPanelHolderUI>();
 
@@ -96,9 +91,7 @@ public class SlotDraggable : MonoBehaviour
         else
         {
 
-
             InventoryPanelHolderUI currentInventoryPanelHolder = _currentSlot.transform.GetComponentInParent<InventoryPanelHolderUI>();
-
 
             if (currentInventoryPanelHolder == newInventoryPanelHolder)
             {
@@ -171,8 +164,5 @@ public class SlotDraggable : MonoBehaviour
         tempItem.SetItem(currentItem);
         currentItem.SetItem(newItem);
         newItem.SetItem(tempItem);
-
-        Debug.Log("GG");
-
     }
 }

@@ -20,6 +20,7 @@ MonoBehaviour:
   MaxPrice: 7
   Icon: {fileID: 0}
   ObjectPrefab: {fileID: 0}
+  ActionList: 01000000
   ItemToCraft:
   - ItemObject: {fileID: 11400000, guid: 7da9b3751d71f0d419ad4280a14cd7cb, type: 2}
     Amount: 3

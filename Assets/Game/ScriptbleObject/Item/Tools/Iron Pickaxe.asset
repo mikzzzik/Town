@@ -18,8 +18,9 @@ MonoBehaviour:
   Weight: 2.5
   LowerPrice: 12
   MaxPrice: 17
-  Icon: {fileID: 21300000, guid: 59fab39b95c4c0d4a999fe4ce5a29cfd, type: 3}
-  ObjectPrefab: {fileID: 0}
+  Icon: {fileID: 21300000, guid: 5d63ef4540a0cb54ea9c06077d8e19ff, type: 3}
+  PickUpObject: {fileID: 0}
+  ActionList: 0000000001000000
   ItemToCraft:
   - ItemObject: {fileID: 11400000, guid: 7da9b3751d71f0d419ad4280a14cd7cb, type: 2}
     Amount: 6

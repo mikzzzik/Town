@@ -17,7 +17,9 @@ public class ItemScriptableObject : ScriptableObject
 
     public Sprite Icon;
 
-    public GameObject ObjectPrefab;
+    public PickUpItem PickUpObject;
+
+    public List<ActionType> ActionList;
 
     public List<Item> ItemToCraft;
     public float TimeToCraft;

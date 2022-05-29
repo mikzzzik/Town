@@ -16,6 +16,7 @@ public class CharacterInventory : MonoBehaviour
     public static Action<Container> OnOpenContainer;
     public static Action OnShow;
     public static Action<PickUpItem> OnPickUpItem;
+    public static Action<Item> OnDropItem;
 
     private void PickUpItem(PickUpItem pickUpItem)
     {
@@ -66,8 +67,6 @@ public class CharacterInventory : MonoBehaviour
         }
     }
 
-
-
     private void Show()
     {
         UpdateItemList();
@@ -75,11 +74,21 @@ public class CharacterInventory : MonoBehaviour
         _inventoryUI.InitSlots(_itemList, _maxWeight);
     }
 
+    private void Drop(Item dropItem)
+    {
+        PickUpItem pickUpItem = Instantiate(dropItem.ItemObject.PickUpObject) as PickUpItem;
+
+        pickUpItem.Drop(dropItem.Amount);
+
+        pickUpItem.transform.position = transform.position;
+
+    }
+
     private void OnEnable()
     {
 
         OnPickUpItem += PickUpItem;
-
+        OnDropItem += Drop;
         OnShow += Show;
     }
 
@@ -87,7 +96,7 @@ public class CharacterInventory : MonoBehaviour
     {
 
         OnPickUpItem -= PickUpItem;
-
+        OnDropItem -= Drop;
         OnShow -= Show;
     }
 

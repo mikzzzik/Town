@@ -9,7 +9,7 @@ public class Slot : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _itemWeightText;
 
 
-    [SerializeField] private SlotType _slotType;
+    [SerializeField] protected SlotType _slotType;
     [SerializeField] protected Item _nowItem;
     
     public void UpdateInfo(Item item)
@@ -54,8 +54,11 @@ public class Slot : MonoBehaviour
 
     protected void ChangeStatus(bool status)
     {
+        _itemAmountText.enabled = status;
         _itemIcon.enabled = status;
         _itemWeightText.enabled = status;
-        _itemAmountText.enabled = status;
+
+        if (_nowItem.ItemObject != null && _nowItem.ItemObject.Type == ItemType.Tools)
+            _itemAmountText.enabled = false;
     }
 }

@@ -27,8 +27,6 @@ public class SlotCraft : Slot
 
     private void ChangeColor(Color color)
     {
-        Debug.Log(color);
-
         _itemAmountText.color = color;
     }
 }
