@@ -71,7 +71,7 @@ public class SlotDraggable : MonoBehaviour
         Item currentItem = _currentSlot.GetItem();
         Item newItem = _newSlot.GetItem();
 
-
+ 
             InventoryPanelHolderUI newInventoryPanelHolder = _newSlot.transform.GetComponentInParent<InventoryPanelHolderUI>();
 
         if (_currentSlot.GetSlotType() == SlotType.Workbench)
