@@ -53,4 +53,10 @@ public class InputSystem : MonoBehaviour
 
 	}
 
+	public void HotBar(InputAction.CallbackContext context)
+	{
+		if (context.performed)
+			Debug.Log(int.Parse(context.control.name));
+	}
+
 }

@@ -10,8 +10,8 @@ public class ContextMenuUI : MonoBehaviour, IPointerDownHandler
     [SerializeField] private RectTransform _contextPanel;
     [SerializeField] private List<ButtonType> _buttonType;
 
-    private SlotHolder _nowSlotHolder;
-    private SlotHolder _equipSlotHolder;
+    private Slot _nowSlot;
+    private Slot _equipSlot;
 
     [System.Serializable]
     public struct ButtonType
@@ -22,7 +22,7 @@ public class ContextMenuUI : MonoBehaviour, IPointerDownHandler
 
 
 
-    public static Action<Vector2, SlotHolder> OnShowContext;
+    public static Action<Vector2, Slot> OnShowContext;
     public static Action OnHide;
 
     private void OnEnable()
@@ -42,7 +42,7 @@ public class ContextMenuUI : MonoBehaviour, IPointerDownHandler
         ContextMenuUI.OnHide();
     }
 
-    private void Show(Vector2 mousePos, SlotHolder slotHolder)
+    private void Show(Vector2 mousePos, Slot slot)
     {
         for(int i = 0;i < _buttonType.Count;i++)
         {
@@ -51,9 +51,9 @@ public class ContextMenuUI : MonoBehaviour, IPointerDownHandler
 
         int count = 0;
 
-        _nowSlotHolder = slotHolder;
+        _nowSlot = slot;
         
-        ItemScriptableObject itemObject = slotHolder.GetItem().ItemObject;
+        ItemScriptableObject itemObject = _nowSlot.GetItem().ItemObject;
 
         for (int i = 0; i < _buttonType.Count; i++)
         {
@@ -82,30 +82,7 @@ public class ContextMenuUI : MonoBehaviour, IPointerDownHandler
     
     public void Equip()
     {
-        if(_equipSlotHolder != null)
-        {
-            if(_equipSlotHolder == _nowSlotHolder)
-            {
-                _nowSlotHolder.ChangeEquipStatus();
-
-                _equipSlotHolder = null;
-            }
-            else
-            {
-                _equipSlotHolder.ChangeEquipStatus();
-                _nowSlotHolder.ChangeEquipStatus();
-
-                _equipSlotHolder = _nowSlotHolder;
-            }
-        }
-        else
-        {
-
-            _nowSlotHolder.ChangeEquipStatus();
-
-            _equipSlotHolder = _nowSlotHolder;
-        }
-
+        
         
 
         Hide();
@@ -113,21 +90,10 @@ public class ContextMenuUI : MonoBehaviour, IPointerDownHandler
 
     public void Drop()
     {
-        CharacterInventory.OnDropItem(_nowSlotHolder.GetItem());
+        CharacterInventory.OnDropItem(_nowSlot.GetItem());
 
-        _nowSlotHolder.ClearSlot();
+        _nowSlot.ClearSlot();
 
         Hide();
-    }
-
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

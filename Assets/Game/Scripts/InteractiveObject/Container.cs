@@ -3,24 +3,22 @@ using UnityEngine;
 
 public class Container : InteractiveObject
 {
-    [SerializeField] private List<Item> _itemList;
+    [SerializeField] private List<Item> _inventoryItemList;
 
 
 
     [SerializeField] private ContainerType _containerType;
-    [SerializeField] private ContainerUI _containerUI;
-
-  // private List<Transform> _availableItemTransform;
+    [SerializeField] private ContainerPanelUI _containerUI;
 
     private void OnEnable()
     {
         int count = _containerType.RowAmount * _containerType.ColumnAmount;
 
-        _itemList = new List<Item>();
+        _inventoryItemList = new List<Item>();
 
         for (int i = 0; i < count; i++)
         {
-            _itemList.Add(new Item());
+            _inventoryItemList.Add(new Item());
         }
 
     }
@@ -32,7 +30,7 @@ public class Container : InteractiveObject
 
     public List<Item> GetItemList()
     {
-        return _itemList;
+        return _inventoryItemList;
     }
 
   
@@ -46,6 +44,7 @@ public class Container : InteractiveObject
     protected override void Active()
     {
         base.Active();
+
         _containerUI.InitSlots(this);
     }
 }

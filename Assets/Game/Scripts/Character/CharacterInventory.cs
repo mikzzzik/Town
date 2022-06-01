@@ -7,9 +7,10 @@ public class CharacterInventory : MonoBehaviour
     [SerializeField] private float _maxWeight;
 
 
-    [SerializeField] private List<Item> _itemList;
+    [SerializeField] private List<Item> _inventoryItemList;
+    [SerializeField] private List<Item> _hotBarItemList;
 
-    [SerializeField] private InventoryUI _inventoryUI;
+    [SerializeField] private InventoryPanelUI _inventoryPanelUI;
 
     private float _itemWeight;
 
@@ -17,6 +18,16 @@ public class CharacterInventory : MonoBehaviour
     public static Action OnShow;
     public static Action<PickUpItem> OnPickUpItem;
     public static Action<Item> OnDropItem;
+    public static Action<Item> OnEquipItem;
+    public static Action<int> OnHotBar;
+
+    private void HotBar(int index)
+    {
+        if(_hotBarItemList[index].ItemObject != null && _hotBarItemList[index].ItemObject.Type == ItemType.Tools)
+        {
+
+        }
+    }
 
     private void PickUpItem(PickUpItem pickUpItem)
     {
@@ -24,20 +35,20 @@ public class CharacterInventory : MonoBehaviour
         
         if (nowItem.ItemObject.Weight * nowItem.Amount+ _itemWeight < _maxWeight)
         {
-            for (int i = 0; i < _itemList.Count;i++)
+            for (int i = 0; i < _inventoryItemList.Count;i++)
             {
-                if (nowItem.ItemObject == _itemList[i].ItemObject)
+                if (nowItem.ItemObject == _inventoryItemList[i].ItemObject)
                 {
-                    _itemList[i].Amount += nowItem.Amount;
+                    _inventoryItemList[i].Amount += nowItem.Amount;
 
                     pickUpItem.PickUp();
 
                     break;
 
                 }
-                else if (_itemList[i].ItemObject == null)
+                else if (_inventoryItemList[i].ItemObject == null)
                 {
-                    _itemList[i] = nowItem;
+                    _inventoryItemList[i] = nowItem;
 
                     pickUpItem.PickUp();
 
@@ -51,7 +62,7 @@ public class CharacterInventory : MonoBehaviour
     
     public void Init(List<Item> itemList)
     {
-        _itemList = itemList;
+        _inventoryItemList = itemList;
 
         UpdateItemList();
     }
@@ -60,10 +71,10 @@ public class CharacterInventory : MonoBehaviour
     { 
         _itemWeight = 0f;
 
-        for (int i = 0; i < _itemList.Count; i++)
+        for (int i = 0; i < _inventoryItemList.Count; i++)
         {
-            if(_itemList[i].ItemObject != null)
-                _itemWeight += _itemList[i].ItemObject.Weight * _itemList[i].Amount;
+            if(_inventoryItemList[i].ItemObject != null)
+                _itemWeight += _inventoryItemList[i].ItemObject.Weight * _inventoryItemList[i].Amount;
         }
     }
 
@@ -71,7 +82,7 @@ public class CharacterInventory : MonoBehaviour
     {
         UpdateItemList();
 
-        _inventoryUI.InitSlots(_itemList, _maxWeight);
+        _inventoryPanelUI.SetItems(_inventoryItemList, _hotBarItemList, _maxWeight);
     }
 
     private void Drop(Item dropItem)
@@ -79,9 +90,18 @@ public class CharacterInventory : MonoBehaviour
         PickUpItem pickUpItem = Instantiate(dropItem.ItemObject.PickUpObject) as PickUpItem;
 
         pickUpItem.Drop(dropItem.Amount);
-
+            
         pickUpItem.transform.position = transform.position;
 
+    }
+
+    private void Equip(Item item)
+    {
+        for(int i = 0; i < _hotBarItemList.Count;i++)
+        {
+            if(_hotBarItemList[i].ItemObject == null)
+                _hotBarItemList[i].SetItem(item);
+        }
     }
 
     private void OnEnable()
@@ -90,6 +110,7 @@ public class CharacterInventory : MonoBehaviour
         OnPickUpItem += PickUpItem;
         OnDropItem += Drop;
         OnShow += Show;
+        OnEquipItem += Equip;
     }
 
     private void OnDisable()
@@ -98,11 +119,12 @@ public class CharacterInventory : MonoBehaviour
         OnPickUpItem -= PickUpItem;
         OnDropItem -= Drop;
         OnShow -= Show;
+        OnEquipItem -= Equip;
     }
 
     public List<Item> GetItemList()
     {
-        return _itemList;
+        return _inventoryItemList;
     }
 
 }

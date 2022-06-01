@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class SlotCraft : Slot
 {
@@ -11,7 +12,10 @@ public class SlotCraft : Slot
     {
         WorkbenchUI.OnClickSlotCraft(GetItem(),_status,_typeIndex,_slotIndex);
     }
-
+    public override void OnPointerDown(PointerEventData eventData)
+    {
+        Click();
+    }
     public void Init(Item item, bool status, int typeIndex, int slotIndex)
     {
         UpdateInfo(item);

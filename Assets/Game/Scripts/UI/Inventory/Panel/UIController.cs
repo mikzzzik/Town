@@ -1,7 +1,9 @@
 using UnityEngine;
 using System;
+using UnityEngine.SceneManagement;
 using System.Collections.Generic;
-public enum SlotType { Inventory, Container, Workbench, Craft };
+
+public enum SlotType { Inventory, Container, Workbench, Craft, Hotbar };
 
 public class UIController : MonoBehaviour
 {
@@ -107,6 +109,11 @@ public class UIController : MonoBehaviour
             CheckPanel();
             Debug.Log("22");
         }
+    }
+
+    public void ToMainMenu()
+    {
+        SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
     }
 
     private void HideAllPanel()

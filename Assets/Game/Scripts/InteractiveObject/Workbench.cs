@@ -5,12 +5,12 @@ using UnityEngine;
 public class Workbench : InteractiveObject
 {
     [SerializeField] private WorkbenchUI _workbenchUI;
-    [SerializeField] private List<ItemScriptableObject> _itemList;
+    [SerializeField] private List<ItemScriptableObject> _inventoryItemList;
     protected override void Active() 
     {
         base.Active();
 
-        _workbenchUI.Init(_itemList);
+        _workbenchUI.Init(_inventoryItemList);
      
     }
 }

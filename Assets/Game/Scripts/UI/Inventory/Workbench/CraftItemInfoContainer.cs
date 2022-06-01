@@ -7,7 +7,7 @@ using TMPro;
 public class CraftItemInfoContainer : MonoBehaviour
 {
     [SerializeField] private CharacterInventory _characterInventory;
-    [SerializeField] private InventoryPanelHolderUI _inventoryPanelHolerUI;
+    [SerializeField] private InventoryPanelUI _inventoryPanelUI;
 
     [SerializeField] private WorkbenchUI _workbenchUI;
 
@@ -22,7 +22,7 @@ public class CraftItemInfoContainer : MonoBehaviour
     [SerializeField] private Image _itemIcon;
     [SerializeField] private Image _progressBar;
 
-    [SerializeField] private List<SlotHolder> _slotHolderList;
+    [SerializeField] private List<Slot> _slotList;
 
     private int _slotIndex;
 
@@ -86,10 +86,10 @@ public class CraftItemInfoContainer : MonoBehaviour
 
         _buttonText.text = "Cancel";
 
-        for (int i = 0; i < _slotHolderList.Count; i++)
+        for (int i = 0; i < _slotList.Count; i++)
         {
-            Debug.Log(_slotHolderList[i].GetItem().ItemObject);
-            if(_slotHolderList[i].GetItem().ItemObject == null)
+            Debug.Log(_slotList[i].GetItem().ItemObject);
+            if(_slotList[i].GetItem().ItemObject == null)
             {
                 ChangeStatus(false);
                 
@@ -172,9 +172,9 @@ public class CraftItemInfoContainer : MonoBehaviour
         _progressBar.fillAmount = 1f;
         _timerText.text = _itemObject.TimeToCraft.ToString();
 
-        _inventoryPanelHolerUI.UpdateUI();
-        
-        _slotHolderList[_slotIndex].UpdateInfo(tempItem);
+        _inventoryPanelUI.UpdateUI();
+
+        _slotList[_slotIndex].UpdateInfo(tempItem);
 
         _workbenchUI.UpdateViewAfterCraft();
     }

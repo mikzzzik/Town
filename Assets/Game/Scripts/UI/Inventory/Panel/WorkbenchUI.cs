@@ -18,7 +18,7 @@ public class WorkbenchUI : MonoBehaviour
 
     [SerializeField] private CharacterInventory _characterInventory;
 
-    [SerializeField] private List<Item> _itemList = new List<Item>();
+    [SerializeField] private List<Item> _inventoryItemList = new List<Item>();
     [SerializeField] private List<NeedItemHolder> _needItemHolder = new List<NeedItemHolder>();
 
     private CraftebleType _nowCraftebleTypeList;
@@ -110,7 +110,7 @@ public class WorkbenchUI : MonoBehaviour
             _craftebleTypeList[i].CanCraft.Clear();
         }
 
-        _itemList.Clear();
+        _inventoryItemList.Clear();
     }
     private bool CanCraft(ItemScriptableObject itemObject)
     {
@@ -120,11 +120,11 @@ public class WorkbenchUI : MonoBehaviour
         {
             status = false;
 
-            for (int j = 0; j < _itemList.Count; j++)
+            for (int j = 0; j < _inventoryItemList.Count; j++)
             {
-                if (_itemList[j].ItemObject == itemObject.ItemToCraft[i].ItemObject)
+                if (_inventoryItemList[j].ItemObject == itemObject.ItemToCraft[i].ItemObject)
                 {
-                    if (_itemList[j].Amount < itemObject.ItemToCraft[i].Amount)
+                    if (_inventoryItemList[j].Amount < itemObject.ItemToCraft[i].Amount)
                     {
                         return false;
                     }
@@ -153,7 +153,6 @@ public class WorkbenchUI : MonoBehaviour
         _itemView.SetActive(true);
 
         int count = _contentHolder.childCount;
-        Debug.Log("GG");
 
         for (int i = 0; i < count; i++)
         {
@@ -175,12 +174,11 @@ public class WorkbenchUI : MonoBehaviour
 
     private void InstantiateSlots(int i, CraftebleType craftebleTypeList)
     {
-        Debug.Log(craftebleTypeList.ItemObjectList.Count);
         for (int j = 0; j < craftebleTypeList.ItemObjectList.Count; j++)
         {
             SlotCraft tempSlot = Instantiate(_slotPrefab) as SlotCraft;
 
-            tempSlot.transform.SetParent(_contentHolder);
+            tempSlot.transform.SetParent(_contentHolder, false);
 
             _item = new Item();
 
@@ -221,16 +219,16 @@ public class WorkbenchUI : MonoBehaviour
     private void CalcItem()
     {
         List<Item> charactreInventoryList = _characterInventory.GetItemList();
-        _itemList.Clear();
+        _inventoryItemList.Clear();
 
         for (int i = 0; i < charactreInventoryList.Count;i++)
         {
             bool status = true;
-            for(int j = 0; j < _itemList.Count;j++)
+            for(int j = 0; j < _inventoryItemList.Count;j++)
             {
-                if(charactreInventoryList[i].ItemObject == _itemList[j].ItemObject)
+                if(charactreInventoryList[i].ItemObject == _inventoryItemList[j].ItemObject)
                 {
-                    _itemList[j].Amount += charactreInventoryList[i].Amount;
+                    _inventoryItemList[j].Amount += charactreInventoryList[i].Amount;
 
                     status = false;
 
@@ -243,7 +241,7 @@ public class WorkbenchUI : MonoBehaviour
 
                 tempItem.SetItem(charactreInventoryList[i]);
 
-                _itemList.Add(tempItem);
+                _inventoryItemList.Add(tempItem);
             }
         }
     }
