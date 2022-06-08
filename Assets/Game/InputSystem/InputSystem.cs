@@ -36,7 +36,7 @@ public class InputSystem : MonoBehaviour
 
 	public void Attack(InputAction.CallbackContext context)
     {
-
+		CharacterToolController.OnAttack();
     }
 
 	public void Escape(InputAction.CallbackContext context)
@@ -56,7 +56,10 @@ public class InputSystem : MonoBehaviour
 	public void HotBar(InputAction.CallbackContext context)
 	{
 		if (context.performed)
+		{
 			Debug.Log(int.Parse(context.control.name));
+			CharacterInventory.OnHotBar(int.Parse(context.control.name) - 1);
+		}
 	}
 
 }

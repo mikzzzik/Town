@@ -43,6 +43,13 @@ public class UIController : MonoBehaviour
         _interactiveTextGameObject.SetActive(status);
     }
 
+    public void SaveClick()
+    {
+        Debug.Log("Save click");
+
+        SaveManager.OnSaveData();
+    }
+
     private void Action()
     {
 
@@ -89,7 +96,7 @@ public class UIController : MonoBehaviour
         if(_panelObjectList.Count <= 0)
         {
             MouseInput.OnChangeStatus(true);
-            Debug.Log("GG");
+       
             Cursor.lockState = CursorLockMode.Locked;
         }
     }
@@ -100,14 +107,12 @@ public class UIController : MonoBehaviour
 
         if(_panelObjectList.Count <= 0)
         {
-            Debug.Log("11");
             ShowPanel(_pauseMenu);
         }
         else
         {
             HideAllPanel();
             CheckPanel();
-            Debug.Log("22");
         }
     }
 
@@ -121,7 +126,6 @@ public class UIController : MonoBehaviour
         
         for(int i = 0; i < _panelObjectList.Count; i++)
         {
-            
             _panelObjectList[0].SetActive(false);
             _panelObjectList.RemoveAt(0);
         }

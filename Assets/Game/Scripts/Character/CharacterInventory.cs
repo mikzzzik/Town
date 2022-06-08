@@ -6,6 +6,7 @@ public class CharacterInventory : MonoBehaviour
 {
     [SerializeField] private float _maxWeight;
 
+    [SerializeField] private CharacterToolController _characterToolController;
 
     [SerializeField] private List<Item> _inventoryItemList;
     [SerializeField] private List<Item> _hotBarItemList;
@@ -21,12 +22,47 @@ public class CharacterInventory : MonoBehaviour
     public static Action<Item> OnEquipItem;
     public static Action<int> OnHotBar;
 
+    private void Awake()
+    {
+        SaveManager.OnSaveData += SaveData;
+        SaveManager.OnLoadData += LoadData;
+    }
+
+    private void OnEnable()
+    {
+
+        OnPickUpItem += PickUpItem;
+        OnDropItem += Drop;
+        OnShow += Show;
+        OnEquipItem += Equip;
+        OnHotBar += HotBar;
+    }
+
+    private void OnDisable()
+    {
+        OnPickUpItem -= PickUpItem;
+        OnDropItem -= Drop;
+        OnShow -= Show;
+        OnEquipItem -= Equip;
+        OnHotBar -= HotBar;
+        SaveManager.OnSaveData -= SaveData;
+        SaveManager.OnLoadData -= LoadData;
+    }
+
     private void HotBar(int index)
     {
-        if(_hotBarItemList[index].ItemObject != null && _hotBarItemList[index].ItemObject.Type == ItemType.Tools)
-        {
+        if (_characterToolController.CanSwitch()) return;
 
+        if (_hotBarItemList[index].ItemObject != null && _hotBarItemList[index].ItemObject.Type == ItemType.Tools)
+        {
+            _characterToolController.Init(_hotBarItemList[index].ItemObject as ToolScriptableObject);
+
+            Debug.Log(_hotBarItemList[index].ItemObject.name);
+
+            return;
         }
+
+        _characterToolController.UnEquip();
     }
 
     private void PickUpItem(PickUpItem pickUpItem)
@@ -104,27 +140,28 @@ public class CharacterInventory : MonoBehaviour
         }
     }
 
-    private void OnEnable()
-    {
-
-        OnPickUpItem += PickUpItem;
-        OnDropItem += Drop;
-        OnShow += Show;
-        OnEquipItem += Equip;
-    }
-
-    private void OnDisable()
-    {
-
-        OnPickUpItem -= PickUpItem;
-        OnDropItem -= Drop;
-        OnShow -= Show;
-        OnEquipItem -= Equip;
-    }
-
     public List<Item> GetItemList()
     {
         return _inventoryItemList;
     }
 
+    private void SaveData()
+    {
+        PlayerInfo playerInfo = new PlayerInfo(transform.localPosition, transform.localRotation, _inventoryItemList, _hotBarItemList);
+
+        SaveManager.SaveToJson(SaveManager.PlayerDataName, playerInfo);
+    }
+
+    private void LoadData()
+    {
+        PlayerInfo playerInfo = SaveManager.LoadFromJson<PlayerInfo>(SaveManager.PlayerDataName);
+        
+        if (playerInfo == null) return;
+
+        transform.position = playerInfo.Position;
+        transform.rotation = playerInfo.Rotation;
+
+        _inventoryItemList = playerInfo.InventoryList;
+        _hotBarItemList = playerInfo.HotBarList;
+    }
 }

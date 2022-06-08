@@ -6,6 +6,8 @@ TagManager:
   tags:
   - InHouse
   - Interactive
+  - Tool
+  - Tree
   layers:
   - Default
   - TransparentFX
@@ -17,8 +19,8 @@ TagManager:
   - Building
   - Character
   - PickUpItem
-  - 
-  - 
+  - Tree
+  - Resource
   - 
   - 
   - 

@@ -9,22 +9,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a7a2db79012e6c4392423f931ccd8b1, type: 3}
+  m_Script: {fileID: 11500000, guid: 3d834832f3580064a963059ce570e701, type: 3}
   m_Name: Iron Pickaxe
   m_EditorClassIdentifier: 
   Type: 3
   Name: Iron Pickaxe
   Description: 
-  Weight: 2.5
-  LowerPrice: 12
-  MaxPrice: 17
+  Weight: 3
+  LowerPrice: 0
+  MaxPrice: 0
   Icon: {fileID: 21300000, guid: 5d63ef4540a0cb54ea9c06077d8e19ff, type: 3}
   PickUpObject: {fileID: 0}
   ActionList: 0000000001000000
   ItemToCraft:
   - ItemObject: {fileID: 11400000, guid: 7da9b3751d71f0d419ad4280a14cd7cb, type: 2}
-    Amount: 6
+    Amount: 5
   - ItemObject: {fileID: 11400000, guid: 32c4a5c9d26467943b45b14bdb79f8d8, type: 2}
     Amount: 10
-  TimeToCraft: 12
+  TimeToCraft: 5
   CraftAmount: 1
+  Tier: 1
+  MaxDuration: 100

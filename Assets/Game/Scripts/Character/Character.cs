@@ -1,5 +1,4 @@
 using UnityEngine;
-using System;
 
 public enum Place
 {
@@ -20,6 +19,7 @@ public class Character : MonoBehaviour
     [SerializeField] private CharacterInventory _characterInventory;
     [SerializeField] private CharacterMoving _characterMoving;
     [SerializeField] private CharacterToolController _characterToolController;
+    [SerializeField] private Animator _animator;
 
     public CharacterInventory GetCharacterInventory()
     {
@@ -35,4 +35,6 @@ public class Character : MonoBehaviour
     {
         return _characterToolController;
     }
+
+
 }

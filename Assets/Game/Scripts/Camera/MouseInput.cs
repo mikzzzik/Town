@@ -9,9 +9,7 @@ public class MouseInput : MonoBehaviour
     [SerializeField] private InputSystem _input;
 
     [Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
-    [SerializeField] private GameObject _cinemachineCameraTarget;
-
-    [SerializeField] private  CinemachineVirtualCamera _virtualCamera;
+    [SerializeField] private Transform _cinemachineCameraTarget;
     
     [Tooltip("For locking the camera position on all axis")]
     [SerializeField] private bool LockCameraPosition = false;
@@ -28,16 +26,21 @@ public class MouseInput : MonoBehaviour
     [SerializeField] private GameObject _headTransform;
 
     // cinemachine
-    private float _cinemachineTargetYaw;
-    private float _cinemachineTargetPitch;
+    [SerializeField] private float _cinemachineTargetYaw;
+    [SerializeField] private float _cinemachineTargetPitch;
 
     private bool _status = true;
-    private bool _interactiveStatus = false;
+    private bool _interactiveStatus = true;
     private const float _threshold = 0.01f;
 
     private GameObject _gameObjectLastHit;
 
     public static Action<bool> OnChangeStatus;
+    private void Awake()
+    {
+        SaveManager.OnSaveData += SaveData;
+        SaveManager.OnLoadData += LoadData;
+    }
 
     private void OnEnable()
     {
@@ -47,6 +50,25 @@ public class MouseInput : MonoBehaviour
     private void OnDisable()
     {
         OnChangeStatus += ChangeStatus;
+        SaveManager.OnSaveData -= SaveData;
+        SaveManager.OnLoadData -= LoadData;
+    }
+
+    private void SaveData()
+    {
+        CameraInfo cameraInfo = new CameraInfo(_cinemachineCameraTarget.eulerAngles);
+
+        SaveManager.SaveToJson(SaveManager.CameraDataName, cameraInfo);
+    }
+
+    private void LoadData()
+    {
+        CameraInfo cameraInfo = SaveManager.LoadFromJson<CameraInfo>(SaveManager.CameraDataName);
+
+        if (cameraInfo == null) return;
+        
+        _cinemachineTargetYaw = cameraInfo.Rotation.y;
+        _cinemachineTargetPitch = cameraInfo.Rotation.x;
     }
 
     private void ChangeStatus(bool status)
@@ -60,7 +82,7 @@ public class MouseInput : MonoBehaviour
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
-      
+
     }
 
     private void RayCastCamera()
@@ -116,6 +138,7 @@ public class MouseInput : MonoBehaviour
 
     private void CameraRotation()
     {
+
         // if there is an input and camera position is not fixed
         if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition)
         {
@@ -128,8 +151,7 @@ public class MouseInput : MonoBehaviour
         _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, _bottomClamp, _topClamp);
 
         // Cinemachine will follow this target
-        _cinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + _cameraAngleOverride,
-            _cinemachineTargetYaw, 0.0f);
+        _cinemachineCameraTarget.rotation = Quaternion.Euler(_cinemachineTargetPitch + _cameraAngleOverride, _cinemachineTargetYaw, 0.0f);
     }
 
     private static float ClampAngle(float lfAngle, float lfMin, float lfMax)

@@ -6,12 +6,12 @@ using UnityEngine.EventSystems;
 public enum ActionType { Equip, Drop};
 public class ContextMenuUI : MonoBehaviour, IPointerDownHandler
 {
+    [SerializeField] private InventoryPanelUI _inventoryPanelUI;
 
     [SerializeField] private RectTransform _contextPanel;
     [SerializeField] private List<ButtonType> _buttonType;
 
     private Slot _nowSlot;
-    private Slot _equipSlot;
 
     [System.Serializable]
     public struct ButtonType
@@ -92,8 +92,10 @@ public class ContextMenuUI : MonoBehaviour, IPointerDownHandler
     {
         CharacterInventory.OnDropItem(_nowSlot.GetItem());
 
-        _nowSlot.ClearSlot();
-
+        _nowSlot.GetItem().Clear();
+        
+        _inventoryPanelUI.UpdateUI();
+        
         Hide();
     }
 }
