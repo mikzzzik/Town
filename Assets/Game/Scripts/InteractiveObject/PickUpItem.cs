@@ -7,12 +7,12 @@ public class PickUpItem : InteractiveObject
 
     private void Awake()
     {
-        ResourceManager.OnSaveResourceData += SaveData;
+        ResourceManager.OnSavePickUpItem += SaveData;
     }
 
     private void OnDisable()
     {
-        ResourceManager.OnSaveResourceData -= SaveData;
+        ResourceManager.OnSavePickUpItem -= SaveData;
     }
 
     public void Drop(int amount)
@@ -39,9 +39,8 @@ public class PickUpItem : InteractiveObject
 
     private void SaveData()
     {
-        PickUpItemInfo resourceInfo = new PickUpItemInfo(transform.position, transform.rotation, _item);
+        PickUpItemInfo pickUpItemInfo = new PickUpItemInfo(transform.position, transform.rotation, _item);
 
-
-        ResourceManager.OnAddToList(resourceInfo);
+        ResourceManager.OnAddPickUpItemToList(pickUpItemInfo);
     }
 }

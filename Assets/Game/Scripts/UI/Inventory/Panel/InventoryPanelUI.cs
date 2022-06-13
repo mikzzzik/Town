@@ -10,14 +10,16 @@ public class InventoryPanelUI : PanelHolderUI
     private List<Item> _inventoryItemList;
     private List<Item> _hotBarItemList;
 
-    public void SetItems(List<Item> inventoryItemList, List<Item> hotBarItemList, float maxWeight)
+    public void SetItems(List<Item> inventoryItemList, List<Item> hotBarItemList, float maxWeight, bool status = true)
     {
         _maxWeight = maxWeight;
 
         _inventoryItemList = inventoryItemList;
         _hotBarItemList = hotBarItemList;
 
-        ShowPanel();
+        if (status)
+            ShowPanel();
+        else UpdateUI();
     }
 
     public override void UpdateUI()
@@ -42,6 +44,8 @@ public class InventoryPanelUI : PanelHolderUI
         {
             _hotBarSlotList[i].UpdateInfo(_hotBarItemList[i]);
         }
+
+        CharacterToolController.OnCheckEquipTool();
     }
 
     protected override void CalcWeight()

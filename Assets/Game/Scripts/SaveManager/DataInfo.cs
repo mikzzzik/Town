@@ -36,11 +36,11 @@ public class CameraInfo
 [System.Serializable]
 public class PickUpItemInfoList
 {
-    public List<PickUpItemInfo> ResourceInfoList;
+    public List<PickUpItemInfo> PickUpItemList;
 
     public PickUpItemInfoList(List<PickUpItemInfo> resourceInfoList)
     {
-           ResourceInfoList = resourceInfoList;
+        PickUpItemList = resourceInfoList;
     }
 }
 
@@ -57,5 +57,32 @@ public class PickUpItemInfo
         Position = position;
         Rotation = rotation;
         Item = item;
+    }
+}
+
+[System.Serializable]
+public class ResourceObjectInfoList
+{
+    public List<ResourceObjectInfo> ResourceObjectList;
+
+    public ResourceObjectInfoList(List<ResourceObjectInfo> resourceObjectInfoList)
+    {
+        ResourceObjectList = resourceObjectInfoList;
+    }
+}
+
+[System.Serializable]
+public class ResourceObjectInfo
+{
+    public Vector3 Position;
+    public Quaternion Rotation;
+    public ResourceObject ResourceObject;
+
+    public ResourceObjectInfo(Vector3 position, Quaternion rotation, ResourceObject resourceObject)
+    {
+
+        Position = position;
+        Rotation = rotation;
+        ResourceObject = resourceObject;
     }
 }

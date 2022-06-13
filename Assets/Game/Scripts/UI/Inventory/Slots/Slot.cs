@@ -52,6 +52,7 @@ public class Slot : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         _nowItem = item;
 
+
         if (_nowItem.ItemObject == null)
         {
             ClearSlot();

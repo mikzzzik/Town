@@ -36,7 +36,7 @@ public class InputSystem : MonoBehaviour
 
 	public void Attack(InputAction.CallbackContext context)
     {
-		CharacterToolController.OnAttack();
+		UIController.OnCheckPanelToAction(() => CharacterToolController.OnAttack());
     }
 
 	public void Escape(InputAction.CallbackContext context)

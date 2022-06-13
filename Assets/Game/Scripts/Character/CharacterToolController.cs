@@ -8,7 +8,9 @@ public class CharacterToolController : MonoBehaviour
     [SerializeField] private List<Tool> _toolsList;
 
     private Tool _eqiupTool;
+    private Item _nowEquipItem;
 
+    public static Action OnCheckEquipTool;
     public static Action OnAttack;
 
 
@@ -25,11 +27,13 @@ public class CharacterToolController : MonoBehaviour
     private void OnEnable()
     {
         OnAttack += Attack;
+        OnCheckEquipTool += CheckEquipItem;
     }
 
     private void OnDisable()
     {
         OnAttack -= Attack;
+        OnCheckEquipTool -= CheckEquipItem;
     }
     private void Attack()
     {
@@ -42,22 +46,25 @@ public class CharacterToolController : MonoBehaviour
         _animator.SetBool("Attack", false);
     }
 
-    public void Init(ToolScriptableObject toolObject)
+    public void Init(Item item)
     {
+        _nowEquipItem = item;
+
+        ToolScriptableObject toolObject = item.ItemObject as ToolScriptableObject;
+
+        Debug.Log(_nowEquipItem);
 
         if (_eqiupTool != null && toolObject == _eqiupTool.GetToolScriptableObject())
         {
             UnEquip();
 
-            Debug.Log("GGGG");
         }
         else
         {
-
-            Debug.Log("GGGG112233");
             if (_eqiupTool != null)
             {
                 UnEquip();
+
             }
 
            for(int i = 0; i< _toolsList.Count; i++)
@@ -68,9 +75,18 @@ public class CharacterToolController : MonoBehaviour
 
                     Equip();
 
+
                     break;
                 }
             }
+        }
+    }
+
+    private void CheckEquipItem()
+    {
+        if(_nowEquipItem != null && _nowEquipItem.ItemObject == null)
+        {
+            UnEquip();
         }
     }
 
@@ -88,9 +104,13 @@ public class CharacterToolController : MonoBehaviour
         if (_eqiupTool == null) return;
 
         _animator.SetBool(_eqiupTool.GetStateName(), false);
+        _animator.SetBool("Attack", false);
+
 
         _eqiupTool.UnEquip();
 
+        _nowEquipItem = null;
+        
         _eqiupTool = null;
     }
 

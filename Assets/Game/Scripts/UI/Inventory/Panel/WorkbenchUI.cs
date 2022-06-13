@@ -218,7 +218,7 @@ public class WorkbenchUI : MonoBehaviour
 
     private void CalcItem()
     {
-        List<Item> charactreInventoryList = _characterInventory.GetItemList();
+        List<Item> charactreInventoryList = _characterInventory.GetInventoryItemList();
         _inventoryItemList.Clear();
 
         for (int i = 0; i < charactreInventoryList.Count;i++)

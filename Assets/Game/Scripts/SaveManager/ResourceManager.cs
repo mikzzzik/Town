@@ -5,16 +5,20 @@ using System;
 
 public class ResourceManager : MonoBehaviour
 {
-    [SerializeField]  List<PickUpItemInfo> _pickUpInfoList;
+    private List<PickUpItemInfo> _pickUpInfoList;
+   [SerializeField] private List<ResourceObjectInfo> _resourceObjectList;
 
-    public static Action OnSaveResourceData;
-    public static Action<PickUpItemInfo> OnAddToList;
+    public static Action OnSavePickUpItem;
+    public static Action OnSaveResourceObject;
+    public static Action<PickUpItemInfo> OnAddPickUpItemToList;
+    public static Action<ResourceObjectInfo> OnAddResourceObjectToList;
 
     private void Awake()
     {
         SaveManager.OnSaveData += SaveData;
         SaveManager.OnLoadData += LoadData;
-        OnAddToList += AddResourceToList;
+        OnAddPickUpItemToList += AddPickUpItemToList;
+        OnAddResourceObjectToList += AddResourceObjectToList;
     }
 
 
@@ -22,41 +26,88 @@ public class ResourceManager : MonoBehaviour
     {
         SaveManager.OnSaveData -= SaveData;
         SaveManager.OnLoadData -= LoadData;
-        OnAddToList -= AddResourceToList;
+
+        OnAddPickUpItemToList -= AddPickUpItemToList;
+        OnAddResourceObjectToList -= AddResourceObjectToList;
     }
-    private void AddResourceToList(PickUpItemInfo pickUpInfo)
+    private void AddPickUpItemToList(PickUpItemInfo pickUpInfo)
     {
         _pickUpInfoList.Add(pickUpInfo);
     }
 
+    private void AddResourceObjectToList(ResourceObjectInfo resourceObject)
+    {
+        _resourceObjectList.Add(resourceObject);
+    }
+
     private void SaveData()
     {
+        SavePickUpInfoData();
+        SaveResourceObjectInfoData();
+
+
+    }
+
+    private void SavePickUpInfoData()
+    {
         _pickUpInfoList = new List<PickUpItemInfo>();
-       
-        OnSaveResourceData?.Invoke();
 
-        if (_pickUpInfoList.Count <= 0) return;
+        OnSavePickUpItem?.Invoke();
 
-        PickUpItemInfoList resourceInfoListHolder = new PickUpItemInfoList(_pickUpInfoList);
+        PickUpItemInfoList pickUpItemInfoList = new PickUpItemInfoList(_pickUpInfoList);
 
-        SaveManager.SaveToJson(SaveManager.ResouceDataName, resourceInfoListHolder);
+        SaveManager.SaveToJson(SaveManager.PickUpItemDataName, pickUpItemInfoList);
+    }
+
+    private void SaveResourceObjectInfoData()
+    {
+        _resourceObjectList = new List<ResourceObjectInfo>();
+
+        OnSaveResourceObject?.Invoke();
+
+        ResourceObjectInfoList resourceObjectInfoList = new ResourceObjectInfoList(_resourceObjectList);
+
+        SaveManager.SaveToJson(SaveManager.ResourceObjectDataName, resourceObjectInfoList);
     }
 
     private void LoadData()
     {
-        PickUpItemInfoList resourceInfoListHolder = SaveManager.LoadFromJson<PickUpItemInfoList>(SaveManager.ResouceDataName);
-      
+        LoadPickUpItem();
+        LoadResourceObject();
+    }
+
+    private void LoadPickUpItem()
+    {
+        PickUpItemInfoList resourceInfoListHolder = SaveManager.LoadFromJson<PickUpItemInfoList>(SaveManager.PickUpItemDataName);
+
         if (resourceInfoListHolder == null) return;
 
-        _pickUpInfoList = resourceInfoListHolder.ResourceInfoList;
-        
-        for(int i =0; i < _pickUpInfoList.Count; i++)
+        _pickUpInfoList = resourceInfoListHolder.PickUpItemList;
+
+        for (int i = 0; i < _pickUpInfoList.Count; i++)
         {
             var pickUpItem = Instantiate(_pickUpInfoList[i].Item.ItemObject.PickUpObject) as PickUpItem;
             pickUpItem.Drop(_pickUpInfoList[i].Item.Amount);
 
             pickUpItem.transform.position = _pickUpInfoList[i].Position;
             pickUpItem.transform.rotation = _pickUpInfoList[i].Rotation;
+        }
+    }
+    
+    private void LoadResourceObject()
+    {
+        ResourceObjectInfoList resourceObjectListHolder = SaveManager.LoadFromJson<ResourceObjectInfoList>(SaveManager.ResourceObjectDataName);
+
+        if (resourceObjectListHolder == null) return;
+
+        _resourceObjectList = resourceObjectListHolder.ResourceObjectList;
+
+        for (int i = 0; i < _resourceObjectList.Count; i++)
+        {
+            var resourceObject = Instantiate(_resourceObjectList[i].ResourceObject.Prefab);
+
+            resourceObject.transform.position = _resourceObjectList[i].Position;
+            resourceObject.transform.rotation = _resourceObjectList[i].Rotation;
         }
     }
 }

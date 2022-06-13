@@ -23,8 +23,7 @@ public class MouseInput : MonoBehaviour
     [Tooltip("Additional degress to override the camera. Useful for fine tuning camera position when locked")]
     [SerializeField] private float _cameraAngleOverride = 0.0f;
 
-    [SerializeField] private GameObject _headTransform;
-
+    [SerializeField] private Transform _characterTransform;
     // cinemachine
     [SerializeField] private float _cinemachineTargetYaw;
     [SerializeField] private float _cinemachineTargetPitch;
@@ -88,11 +87,9 @@ public class MouseInput : MonoBehaviour
     private void RayCastCamera()
     {
         Debug.DrawRay(transform.position, transform.forward * 3, Color.red);
-      //  Debug.DrawRay(_headTransform.transform.position, transform.forward * 2.8f, Color.red);
 
         RaycastHit hit;
 
-        // Does the ray intersect any objects excluding the player layer
         if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, 2.8f))
         {
             if (hit.collider.tag != "Interactive")
@@ -138,19 +135,16 @@ public class MouseInput : MonoBehaviour
 
     private void CameraRotation()
     {
-
-        // if there is an input and camera position is not fixed
         if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition)
         {
             _cinemachineTargetYaw += _input.look.x* Time.fixedDeltaTime*2;
             _cinemachineTargetPitch += -_input.look.y * Time.fixedDeltaTime*2;
         }
-
-        // clamp our rotations so our values are limited 360 degrees
         _cinemachineTargetYaw = ClampAngle(_cinemachineTargetYaw, float.MinValue, float.MaxValue);
         _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, _bottomClamp, _topClamp);
 
-        // Cinemachine will follow this target
+        _characterTransform.rotation = Quaternion.Euler(0.0f, _cinemachineTargetYaw, 0.0f);
+
         _cinemachineCameraTarget.rotation = Quaternion.Euler(_cinemachineTargetPitch + _cameraAngleOverride, _cinemachineTargetYaw, 0.0f);
     }
 

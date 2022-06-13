@@ -20,8 +20,6 @@ public class ContextMenuUI : MonoBehaviour, IPointerDownHandler
         public ActionType Type;
     }
 
-
-
     public static Action<Vector2, Slot> OnShowContext;
     public static Action OnHide;
 
@@ -82,9 +80,6 @@ public class ContextMenuUI : MonoBehaviour, IPointerDownHandler
     
     public void Equip()
     {
-        
-        
-
         Hide();
     }
 

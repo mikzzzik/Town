@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Tree : MonoBehaviour
 {
+    [SerializeField] private ResourceObject _resourceObject;
     [SerializeField] private GameObject _woodPrefab;
     [SerializeField] private List<Transform> _instantiateTransformList;
 
@@ -13,6 +14,22 @@ public class Tree : MonoBehaviour
     [SerializeField] private CapsuleCollider _treeCollider;
 
     [SerializeField] private CapsuleCollider _mainCollider;
+
+    private void Awake()
+    {
+        ResourceManager.OnSaveResourceObject += SaveData;
+    }
+
+    private void OnDisable()
+    {
+        ResourceManager.OnSaveResourceObject -= SaveData;
+    }
+    private void SaveData()
+    {
+        ResourceObjectInfo resourceObjectInfo = new ResourceObjectInfo(transform.position, transform.rotation, _resourceObject);
+
+        ResourceManager.OnAddResourceObjectToList(resourceObjectInfo);
+    }
 
     private void Start()
     {
@@ -37,8 +54,6 @@ public class Tree : MonoBehaviour
         }
     }
 
-
-
     IEnumerator Fall()
     {
         _mainCollider.enabled = false;
@@ -55,7 +70,7 @@ public class Tree : MonoBehaviour
             wood.transform.position = _instantiateTransformList[i].position + Vector3.up * 0.5f;
         }
 
-        Destroy(gameObject);
+        Destroy(this.gameObject);
     }
 
     private void OnCollisionEnter(Collision collision)

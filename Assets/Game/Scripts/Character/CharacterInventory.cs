@@ -22,12 +22,6 @@ public class CharacterInventory : MonoBehaviour
     public static Action<Item> OnEquipItem;
     public static Action<int> OnHotBar;
 
-    private void Awake()
-    {
-        SaveManager.OnSaveData += SaveData;
-        SaveManager.OnLoadData += LoadData;
-    }
-
     private void OnEnable()
     {
 
@@ -45,19 +39,18 @@ public class CharacterInventory : MonoBehaviour
         OnShow -= Show;
         OnEquipItem -= Equip;
         OnHotBar -= HotBar;
-        SaveManager.OnSaveData -= SaveData;
-        SaveManager.OnLoadData -= LoadData;
+
     }
 
     private void HotBar(int index)
     {
+       
+
         if (_characterToolController.CanSwitch()) return;
 
         if (_hotBarItemList[index].ItemObject != null && _hotBarItemList[index].ItemObject.Type == ItemType.Tools)
         {
-            _characterToolController.Init(_hotBarItemList[index].ItemObject as ToolScriptableObject);
-
-            Debug.Log(_hotBarItemList[index].ItemObject.name);
+            _characterToolController.Init(_hotBarItemList[index]);
 
             return;
         }
@@ -96,11 +89,14 @@ public class CharacterInventory : MonoBehaviour
         UpdateItemList();
     }
     
-    public void Init(List<Item> itemList)
+    public void Init(List<Item> inventoryItemList, List<Item> hotBarItemList)
     {
-        _inventoryItemList = itemList;
+        _inventoryItemList = inventoryItemList;
+        _hotBarItemList = hotBarItemList;
 
         UpdateItemList();
+
+        _inventoryPanelUI.SetItems(_inventoryItemList, _hotBarItemList, _maxWeight, false);
     }
 
     private void UpdateItemList()
@@ -140,28 +136,14 @@ public class CharacterInventory : MonoBehaviour
         }
     }
 
-    public List<Item> GetItemList()
+    public List<Item> GetInventoryItemList()
     {
         return _inventoryItemList;
     }
 
-    private void SaveData()
+    public List<Item> GetHotBarItemList()
     {
-        PlayerInfo playerInfo = new PlayerInfo(transform.localPosition, transform.localRotation, _inventoryItemList, _hotBarItemList);
-
-        SaveManager.SaveToJson(SaveManager.PlayerDataName, playerInfo);
+        return _hotBarItemList;
     }
 
-    private void LoadData()
-    {
-        PlayerInfo playerInfo = SaveManager.LoadFromJson<PlayerInfo>(SaveManager.PlayerDataName);
-        
-        if (playerInfo == null) return;
-
-        transform.position = playerInfo.Position;
-        transform.rotation = playerInfo.Rotation;
-
-        _inventoryItemList = playerInfo.InventoryList;
-        _hotBarItemList = playerInfo.HotBarList;
-    }
 }

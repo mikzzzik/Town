@@ -144,7 +144,7 @@ public class CraftItemInfoContainer : MonoBehaviour
     {
         _buttonText.text = "Craft";
 
-        List<Item> characterItemList = _characterInventory.GetItemList();
+        List<Item> characterItemList = _characterInventory.GetInventoryItemList();
 
         Item tempItem = new Item();
 
