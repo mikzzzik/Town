@@ -16,8 +16,7 @@ MonoBehaviour:
   Name: Stone
   Description: Gather from rock
   Weight: 0.25
-  LowerPrice: 2
-  MaxPrice: 6
+  MaxAmount: 25
   Icon: {fileID: 21300000, guid: 81c276142472fec41b4f3c01143ade29, type: 3}
   PickUpObject: {fileID: 688061531020555051, guid: 41908e8370d7cbe4e99d61d2baabc0fc, type: 3}
   ActionList: 01000000

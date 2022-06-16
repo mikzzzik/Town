@@ -5,7 +5,8 @@ public class InventoryPanelUI : PanelHolderUI
 {
     [SerializeField] private List<Slot> _inventorylotSlotList = new List<Slot>();
     [SerializeField] private List<Slot> _hotBarSlotList = new List<Slot>();
-
+    private float _maxWeight;
+    private float _nowWeight;
 
     private List<Item> _inventoryItemList;
     private List<Item> _hotBarItemList;
@@ -48,7 +49,7 @@ public class InventoryPanelUI : PanelHolderUI
         CharacterToolController.OnCheckEquipTool();
     }
 
-    protected override void CalcWeight()
+    private void CalcWeight()
     {
         _nowWeight = 0;
 
@@ -66,29 +67,4 @@ public class InventoryPanelUI : PanelHolderUI
 
         SetWeight(_maxWeight, _nowWeight);
     }   
-
-    public override bool CheckCanSwitch(Item oldItem, Item newItem)
-    {
-        float weight = 0f;
-
-        List<Item> itemList = new List<Item>(_inventoryItemList);
-
-        itemList.AddRange(_hotBarItemList);
-
-        for (int i = 0; i <= itemList.Count; i++)
-        {
-            if (itemList[i].ItemObject != null && itemList[i] != oldItem)
-            {
-                weight += itemList[i].ItemObject.Weight * itemList[i].Amount;
-            }
-        }
-        if (newItem.ItemObject != null)
-            weight += newItem.ItemObject.Weight * newItem.Amount;
-
-        if (weight <= _maxWeight)
-        {
-            return true;
-        }
-        else return false;
-    }
 }

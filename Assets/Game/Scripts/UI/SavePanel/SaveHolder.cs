@@ -32,8 +32,6 @@ public class SaveHolder : MonoBehaviour
             PlayerPrefs.DeleteKey("SaveName");
         }
 
-        Debug.Log(_name + " _ " + PlayerPrefs.GetString("SaveName"));
-
         string path = Application.persistentDataPath + "/Save/" + _name;
         
         Directory.Delete(path, true);

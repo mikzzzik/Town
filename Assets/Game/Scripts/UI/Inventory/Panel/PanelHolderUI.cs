@@ -6,8 +6,8 @@ public class PanelHolderUI : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI _weightText;
     [SerializeField] private GameObject _panel;
-    protected float _maxWeight;
-    protected float _nowWeight;
+//    protected float _maxWeight;
+//    protected float _nowWeight;
 
     public void SetWeight(float maxWeight, float nowWeight)
     {
@@ -15,18 +15,7 @@ public class PanelHolderUI : MonoBehaviour
     }
 
     public virtual bool CheckCanSwitch(Item oldItem, Item newItem) { return false; }
-    public bool CanDrag(Item item)
-    {
-        Debug.Log(item.Amount * item.ItemObject.Weight);
-        Debug.Log(_maxWeight - _nowWeight);
-        if (item.Amount * item.ItemObject.Weight <= _maxWeight - _nowWeight) return true;
-            else return false;
-    }
 
-    public float GetAvailableWeight()
-    {
-        return _maxWeight - _nowWeight;
-    }
 
     protected void ShowPanel()
     {
@@ -37,10 +26,6 @@ public class PanelHolderUI : MonoBehaviour
     }
 
     public virtual void UpdateUI()
-    {
-
-    }
-    protected virtual void CalcWeight()
     {
 
     }

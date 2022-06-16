@@ -16,8 +16,7 @@ MonoBehaviour:
   Name: Iron Axe
   Description: 
   Weight: 2
-  LowerPrice: 0
-  MaxPrice: 0
+  MaxAmount: 1
   Icon: {fileID: 21300000, guid: 59fab39b95c4c0d4a999fe4ce5a29cfd, type: 3}
   PickUpObject: {fileID: 0}
   ActionList: 0000000001000000

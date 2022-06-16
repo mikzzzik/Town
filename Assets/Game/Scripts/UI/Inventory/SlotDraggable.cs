@@ -78,9 +78,7 @@ public class SlotDraggable : MonoBehaviour
             newPanelHolder = _newSlot.transform.GetComponentInParent<PanelHolderUI>();
         else newPanelHolder = curentPanelHolder;
 
-
-
-        if (_currentSlot.GetSlotType() == SlotType.Workbench && newPanelHolder.CanDrag(currentItem))
+        if (_currentSlot.GetSlotType() == SlotType.Workbench)
         {
             newItem.SetItem(currentItem);
 
@@ -90,45 +88,28 @@ public class SlotDraggable : MonoBehaviour
         }
         else if (_currentSlot.GetSlotType() == _newSlot.GetSlotType())
         {
-            if (newItem.ItemObject == null)
+            if (newItem.ItemObject == null )
             {
                 ItemSwitch();
             }
             else if (currentItem.ItemObject == newItem.ItemObject)
             {
-                newItem.Amount += currentItem.Amount;
-                currentItem.Clear();
-            }
+                int availebleAmount = newItem.ItemObject.MaxAmount - newItem.Amount;
 
-            curentPanelHolder.UpdateUI();
-        }
-        else
-        {
-            if (newItem.ItemObject == null && newPanelHolder.CanDrag(currentItem))
-            {
-                ItemSwitch();
-            }
-            else if (currentItem.ItemObject == newItem.ItemObject)
-            {
-                float availebleWeight = newPanelHolder.GetAvailableWeight();
+                int amount = availebleAmount > currentItem.Amount ? currentItem.Amount : availebleAmount;
 
-                if (availebleWeight >= currentItem.Amount * currentItem.ItemObject.Weight)
-                {
-                    newItem.Amount += currentItem.Amount;
+                currentItem.Amount -= amount;
+                newItem.Amount += amount;
+
+                if (currentItem.Amount <= 0)
                     currentItem.Clear();
-                }
-                else
-                {
-                    int amountItem = (int)(availebleWeight / currentItem.ItemObject.Weight);
-
-                    currentItem.Amount -= amountItem;
-                    newItem.Amount += amountItem;
-                }
             }
+
             if(_currentSlot.GetSlotType() != SlotType.Workbench)
                 curentPanelHolder.UpdateUI();
             newPanelHolder.UpdateUI();
         }
+
         Clear();
     }
 

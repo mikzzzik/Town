@@ -35,30 +35,12 @@ public class ContainerPanelUI : PanelHolderUI
         _mainPanelRectTransform.sizeDelta = new Vector2(width + _panelSpace * 2, height + _panelSpace * 2 + _heightPanelSpace);
 
         _itemList = _container.GetItemList();
-        _maxWeight = _containerType.MaxWeight;
+
 
         InstantiateSlot();
-        CalcWeight();
         ShowPanel();
 
         CharacterInventory.OnShow();
-    }
-
-    protected override void CalcWeight()
-    {
-        _nowWeight = 0;
-
-        List<Item> itemList = new List<Item>(_itemList);
-
-        for (int i = 0; i < itemList.Count; i++)
-        {
-            if (itemList[i].ItemObject != null)
-            {
-                _nowWeight += itemList[i].ItemObject.Weight * itemList[i].Amount;
-            }
-        }
-
-        SetWeight(_maxWeight, _nowWeight);
     }
 
     private void InstantiateSlot()
@@ -103,6 +85,5 @@ public class ContainerPanelUI : PanelHolderUI
         {
             _slotList[i].UpdateInfo(_itemList[i]);
         }
-        CalcWeight(); 
     }
 }

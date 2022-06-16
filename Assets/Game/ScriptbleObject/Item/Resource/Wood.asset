@@ -16,8 +16,7 @@ MonoBehaviour:
   Name: Wood
   Description: Gather from tree
   Weight: 0.25
-  LowerPrice: 2
-  MaxPrice: 5
+  MaxAmount: 25
   Icon: {fileID: 21300000, guid: 333942d970d1d014bb3516b674e4e611, type: 3}
   PickUpObject: {fileID: 1702340377835019692, guid: d431fddec9601dc4e8d24dfac4133811, type: 3}
   ActionList: 01000000

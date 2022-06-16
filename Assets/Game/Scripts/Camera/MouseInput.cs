@@ -28,6 +28,8 @@ public class MouseInput : MonoBehaviour
     [SerializeField] private float _cinemachineTargetYaw;
     [SerializeField] private float _cinemachineTargetPitch;
 
+    [SerializeField] private Transform _aimPosTransform;
+
     private bool _status = true;
     private bool _interactiveStatus = true;
     private const float _threshold = 0.01f;
@@ -86,11 +88,11 @@ public class MouseInput : MonoBehaviour
 
     private void RayCastCamera()
     {
-        Debug.DrawRay(transform.position, transform.forward * 3, Color.red);
+        Debug.DrawRay(transform.position, transform.forward * Vector3.Distance(transform.position, _aimPosTransform.position), Color.red);
 
         RaycastHit hit;
 
-        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, 2.8f))
+        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, Vector3.Distance(transform.position, _aimPosTransform.position)))
         {
             if (hit.collider.tag != "Interactive")
             {

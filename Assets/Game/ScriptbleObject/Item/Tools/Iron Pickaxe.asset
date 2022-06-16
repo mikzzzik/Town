@@ -16,8 +16,7 @@ MonoBehaviour:
   Name: Iron Pickaxe
   Description: 
   Weight: 3
-  LowerPrice: 0
-  MaxPrice: 0
+  MaxAmount: 1
   Icon: {fileID: 21300000, guid: 5d63ef4540a0cb54ea9c06077d8e19ff, type: 3}
   PickUpObject: {fileID: 0}
   ActionList: 0000000001000000

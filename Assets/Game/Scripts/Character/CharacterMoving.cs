@@ -51,8 +51,6 @@ public class CharacterMoving : MonoBehaviour
 
     private void Update()
     {
-     //   Debug.Log(Time.fixedDeltaTime + " | " +  Time.deltaTime);
-
             Move();
     }
     private void Move()
