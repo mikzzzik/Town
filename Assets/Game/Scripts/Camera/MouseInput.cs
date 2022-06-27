@@ -88,15 +88,16 @@ public class MouseInput : MonoBehaviour
 
     private void RayCastCamera()
     {
-        Debug.DrawRay(transform.position, transform.forward * Vector3.Distance(transform.position, _aimPosTransform.position), Color.red);
+
+        float distance = Vector3.Distance(transform.position, _aimPosTransform.position);
+        Debug.DrawRay(transform.position, transform.forward * distance, Color.red);
 
         RaycastHit hit;
 
-        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, Vector3.Distance(transform.position, _aimPosTransform.position)))
+        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, distance))
         {
             if (hit.collider.tag != "Interactive")
             {
-                Debug.Log(hit.collider.tag);
 
                 return;
             }
@@ -109,7 +110,7 @@ public class MouseInput : MonoBehaviour
             _interactiveStatus = true;
             Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
            
-            Debug.Log("Did Hit");
+//            Debug.Log("Did Hit");
         }
         else if(_gameObjectLastHit != null || _interactiveStatus && _gameObjectLastHit == null)
         {

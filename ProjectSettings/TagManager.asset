@@ -8,6 +8,11 @@ TagManager:
   - Interactive
   - Tool
   - Tree
+  - Floor
+  - Foundation
+  - Wall
+  - Pillar
+  - Wall
   layers:
   - Default
   - TransparentFX
@@ -23,7 +28,7 @@ TagManager:
   - Resource
   - Terrain
   - ToBuild
-  - 
+  - BuildingPosition
   - 
   - 
   - 

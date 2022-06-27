@@ -15,8 +15,6 @@ public class PlayerManager : MonoBehaviour
 
         SaveManager.OnSaveData += SaveData;
         SaveManager.OnLoadData += LoadData;
-
-        Debug.Log(_character.transform.position);
     }
 
     private void OnDisable()
@@ -25,14 +23,6 @@ public class PlayerManager : MonoBehaviour
         SaveManager.OnLoadData -= LoadData;
     }
 
-    private void OnEnable()
-    {
-        Debug.Log(_character.transform.position);
-    }
-    private void Start()
-    {
-        Debug.Log(_character.transform.position);
-    }
 
     private void SaveData()
     {        

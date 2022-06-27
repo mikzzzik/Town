@@ -64,6 +64,7 @@ public class SlotDraggable : MonoBehaviour
     {
         if (_currentSlot == null || _newSlot == null || _newSlot == _currentSlot || _newSlot.GetSlotType() == SlotType.Workbench)
         {
+            Debug.Log("1");
             Clear();
             return;
         }
@@ -80,20 +81,24 @@ public class SlotDraggable : MonoBehaviour
 
         if (_currentSlot.GetSlotType() == SlotType.Workbench)
         {
+            Debug.Log("2");
             newItem.SetItem(currentItem);
 
             newPanelHolder.UpdateUI();
 
             _currentSlot.ClearSlot();
         }
-        else if (_currentSlot.GetSlotType() == _newSlot.GetSlotType())
+        else 
         {
-            if (newItem.ItemObject == null )
+            Debug.Log("3");
+            if (newItem.ItemObject == null)
             {
+                Debug.Log("4");
                 ItemSwitch();
             }
             else if (currentItem.ItemObject == newItem.ItemObject)
             {
+                Debug.Log("5");
                 int availebleAmount = newItem.ItemObject.MaxAmount - newItem.Amount;
 
                 int amount = availebleAmount > currentItem.Amount ? currentItem.Amount : availebleAmount;
@@ -105,11 +110,13 @@ public class SlotDraggable : MonoBehaviour
                     currentItem.Clear();
             }
 
-            if(_currentSlot.GetSlotType() != SlotType.Workbench)
+            if (_currentSlot.GetSlotType() != SlotType.Workbench)
                 curentPanelHolder.UpdateUI();
             newPanelHolder.UpdateUI();
         }
+       
 
+        Debug.Log("6");
         Clear();
     }
 

@@ -19,6 +19,11 @@ ModelImporter:
       assembly: UnityEngine.CoreModule
       name: PolygonFarm_Texture_02_A
     second: {fileID: 2100000, guid: fcf73fdc6bcbef7458fa48497bdf600a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: PolygonFarm_Texture_02_A.001
+    second: {fileID: 2100000, guid: fcf73fdc6bcbef7458fa48497bdf600a, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

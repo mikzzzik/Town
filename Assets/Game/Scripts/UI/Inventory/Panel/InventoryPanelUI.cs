@@ -5,8 +5,7 @@ public class InventoryPanelUI : PanelHolderUI
 {
     [SerializeField] private List<Slot> _inventorylotSlotList = new List<Slot>();
     [SerializeField] private List<Slot> _hotBarSlotList = new List<Slot>();
-    private float _maxWeight;
-    private float _nowWeight;
+
 
     private List<Item> _inventoryItemList;
     private List<Item> _hotBarItemList;
@@ -66,5 +65,5 @@ public class InventoryPanelUI : PanelHolderUI
         }
 
         SetWeight(_maxWeight, _nowWeight);
-    }   
+    }
 }

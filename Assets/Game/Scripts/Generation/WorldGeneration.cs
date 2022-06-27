@@ -62,7 +62,6 @@ public class WorldGeneration : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("HitCount > 0");
                     i--;
                 }
             }
